@@ -1,0 +1,2 @@
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\MainContent\obj\x86\Debug\MainContent.contentprojResolveAssemblyReference.cache
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\MainContent\obj\x86\Debug\MainContent.contentprojResolveAssemblyReference.cache

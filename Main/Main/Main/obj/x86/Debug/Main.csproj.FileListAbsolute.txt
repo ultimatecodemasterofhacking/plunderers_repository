@@ -1,0 +1,42 @@
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Main.exe
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Main.pdb
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.dll
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Game.dll
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.dll
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.dll
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.dll
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.xml
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Game.xml
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.xml
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.xml
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.xml
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\obj\x86\Debug\Main.csprojResolveAssemblyReference.cache
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\obj\x86\Debug\Main.exe
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\obj\x86\Debug\Main.pdb
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Content\ocean-0-0.xnb
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Content\ocean-0-1.xnb
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Content\ocean-1-0.xnb
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Content\ocean-1-1.xnb
+C:\Users\122765\Desktop\XNA_Projects\Plunderers Stuffs\Main\Main\Main\bin\x86\Debug\Content\ship1.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-0-0.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-0-1.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-1-0.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-1-1.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ship1.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Main.exe
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Main.pdb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.dll
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Game.dll
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.dll
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.dll
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.dll
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.xml
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Game.xml
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.xml
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.xml
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.xml
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\obj\x86\Debug\Main.csprojResolveAssemblyReference.cache
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\obj\x86\Debug\Main.exe
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\obj\x86\Debug\Main.pdb
