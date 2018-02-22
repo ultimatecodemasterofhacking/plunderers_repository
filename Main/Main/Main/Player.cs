@@ -20,6 +20,8 @@ namespace Main
         private Rectangle shipR;
         private float shipScale;
         private float charScale;
+        public float shipSpeedX = 0;
+        public float shipSpeedY = 0;
         public float shipSpeed = 0;
         private float maxShipSpeed = 8;
         private float shipDeccel = -.08f;
@@ -34,6 +36,8 @@ namespace Main
         private int shipInd = 0;
         private float currSheading = 0;
         private float destSheading = 0;
+        private float shipTurnSpeed = .025f;
+        private float shipTurnErrorMargin = .1f;
 
         public Player (int shipType, int pNum, Map map)
         {
@@ -47,6 +51,8 @@ namespace Main
             fromShipCenterVariation[0] = 7;
             fromShipCenterVariation[1] = 5;
             shipSpeed = 0;
+            shipSpeedX = 0;
+            shipSpeedY = 0;
             decellMode = false;
             shipHeadingRad = 0;
             switch(shipType)
@@ -111,20 +117,112 @@ namespace Main
             }
         }
 
+        public void manageShipHeading()
+        {
+            if (shipSpeed != 0)
+            {
+
+                normalizeShipHeading();
+                int[] pCent = centerOnMap();
+                float goalHeading = 0;
+                /*
+                if (targetDest[0] > pCent[0])
+                {
+                    goalHeading =(float)( Math.Atan((targetDest[1] - pCent[1]) * 1.0 / (targetDest[0]-pCent[0])));
+                } else
+                {
+                    goalHeading = (float)((Math.Atan((targetDest[1] - pCent[1]) * 1.0 / (targetDest[0] - pCent[0]))));
+                }
+                */
+                goalHeading = (float)(Math.Atan(Math.Abs((targetDest[1] - pCent[1])) * 1.0 / Math.Abs((targetDest[0] - pCent[0]))));
+                if (goalHeading > Math.PI/2)
+                {
+                    Console.WriteLine("PROBLEMMMMMMMMMMMMMMMM");
+                }
+                if (targetDest[0] > pCent[0])
+                {
+                    if (targetDest[1] > pCent[1])
+                    {
+                        //do nothing
+                    }
+                    else
+                    {
+                        goalHeading = (float)(Math.PI - goalHeading);
+                    }
+                }
+                else
+                {
+                    if (targetDest[1] > pCent[1])
+                    {
+                        goalHeading = (float)(Math.PI + goalHeading);
+                    }
+                    else
+                    {
+                        goalHeading = (float)(2.0 * Math.PI - goalHeading);
+                    }
+                }
+
+                float ccw = Math.Abs(goalHeading - shipHeadingRad);
+                float cw = Math.Abs(shipHeadingRad - goalHeading);
+                float min = ccw <= cw ? ccw : cw;
+                bool clockwise = cw <= ccw ? true : false;
+
+                Console.WriteLine("clockwise is " + clockwise);
+                Console.WriteLine("SH " + shipHeadingRad);
+                Console.WriteLine("GH " + goalHeading);
+                Console.WriteLine("Rad to Overcome: " + min);
+                if (min > shipTurnErrorMargin)
+                {
+
+                    if (clockwise)
+                    {
+                        shipHeadingRad -= shipTurnSpeed;
+                    }
+                    else
+                    {
+                        shipHeadingRad += shipTurnSpeed;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("*Heading spot on");
+                }
+            } else
+            {
+                Console.WriteLine("ship speed is zero");
+            }
+            //testing shipHeadingRad = (float)(Math.PI / 3);
+        }
+
+        public int[] distroShipSpeed ()
+        {
+            int[] amts = new int[2];
+            amts[0] = (int)(shipSpeed * Math.Cos(shipHeadingRad));
+            amts[1] = (int)(shipSpeed * Math.Sin(shipHeadingRad));
+            return amts;
+        }
+
         public void move ()
         {
-            Console.WriteLine("TD= " + targetDest[0] + " " + targetDest[1]);
-            Console.WriteLine("Decell = " + decellMode);
-            Console.WriteLine("Speed = " + shipSpeed);
+           // Console.WriteLine("TD= " + targetDest[0] + " " + targetDest[1]);
+           // Console.WriteLine("Decell = " + decellMode);
+           // Console.WriteLine("Speed = " + shipSpeed);
 
             if (targetDest[0] >=0 || targetDest[1] >=0)
             {
-                Console.WriteLine("MOVING");
+               // Console.WriteLine("MOVING");
 
                 if (!charForm)
                 {
+                    
+                    manageShipHeading();
                     manageShipSpeed();
+                    int[] amts = distroShipSpeed();
+                    int xAmt = amts[0];
+                    int yAmt = amts[1];
                     int[] pCent = centerOnMap();
+                    /* -------------------------------------
+                    
 
                     double hype = Math.Sqrt(Math.Pow(targetDest[0] - pCent[0], 2) + Math.Pow(targetDest[1] - pCent[1], 2));
                     double z = -1;
@@ -156,7 +254,7 @@ namespace Main
                         xAmt = (int)(z * (targetDest[0] - pCent[0]));
                         yAmt = (int)(z * (targetDest[1] - pCent[1]));
                     }
-
+                    */ //------------------------------------
 
                     //
                     int tempShipRX = shipR.X;
@@ -208,7 +306,7 @@ namespace Main
                             decellMode = true;
                             //set new target
                             int displacement = (int)((-1 * shipSpeed * shipSpeed) / (2 * shipDeccel));
-                            Console.WriteLine("DISPLACEMENT - " + displacement);
+                            //Console.WriteLine("DISPLACEMENT - " + displacement);
                             float n = displacement/shipSpeed;
                             int moreXAmt = (int)(n * xAmt);
                             int moreYAmt = (int)(n * yAmt);
@@ -222,7 +320,7 @@ namespace Main
                         }
                         
                         //set new targetdest
-                        Console.WriteLine("---We're there!");
+                        //Console.WriteLine("---We're there!");
                         
                     }
 
@@ -231,7 +329,17 @@ namespace Main
             } else
             {
                 
-                Console.WriteLine("Not moving");
+                //Console.WriteLine("Not moving");
+            }
+        }
+
+        public void normalizeShipHeading ()
+        {
+            
+            shipHeadingRad = (float)(shipHeadingRad % (Math.PI * 2));
+            if (shipHeadingRad <0)
+            {
+                shipHeadingRad = (float)(shipHeadingRad + Math.PI * 2);
             }
         }
 
@@ -312,7 +420,7 @@ namespace Main
                 else if (map.adjFact[i] >= map.maxAdjFact[i]) //onRight
                 {
                     map.adjFact[i] = map.maxAdjFact[i];
-                    Console.WriteLine("Scrolling");
+                    //Console.WriteLine("Scrolling");
                     if (centerRelScreen()[i] <= Game1.dim[i] / 2)
                     {
                         
@@ -336,7 +444,7 @@ namespace Main
 
         public void render ()
         {
-            sb.Draw(shipT[shipInd],new Rectangle(shipR.X -map.adjFact[0], shipR.Y -map.adjFact[1], shipR.Width, shipR.Height), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, shipHeadingRad, new Vector2(shipR.Width/2, shipR.Height/2), SpriteEffects.None, 0);
+            sb.Draw(shipT[shipInd],new Rectangle(shipR.X -map.adjFact[0], shipR.Y -map.adjFact[1], shipR.Width, shipR.Height), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), SpriteEffects.None, 0);
         }
     }
 }
