@@ -17,12 +17,13 @@ namespace Main
         private int type;
         private Texture2D[,] waterT;
         private Rectangle[,] waterR;
-        public int waeY = 1; //1 is up, 2 is down, -1 is not
-        public int waeX = 1; //1 is left, 2 is right, -1 is not
         public int mapWidth = 0;
         public int mapHeight = 0;
-        public int[] adjFact;
-        public int[] maxAdjFact;
+        public static int[] adjFact;
+        public static int[] maxAdjFact;
+        private Island[] islands;
+        private int edgeIslandBuffer = 50;
+        public static float islandScale;
 
 
         public Map(int type, int seed)
@@ -32,9 +33,11 @@ namespace Main
             adjFact = new int[2]; //for rendering the map centered on player
             maxAdjFact = new int[2];
             //generate random map
+            Texture2D[] islandTexts;
             switch (type)
             {
                 case 0:
+                    //Build tiled water background
                     waterT = new Texture2D[2, 2];
                     waterR = new Rectangle[2, 2];
                     int[] backDims = new int[2];
@@ -63,6 +66,41 @@ namespace Main
                     mapHeight = backDims[1] * 2;
                     maxAdjFact[0] = mapWidth - Game1.dim[0];
                     maxAdjFact[1] = mapHeight - Game1.dim[1];
+                    //load in island texts
+                    islandScale = .65f;
+                    islandTexts = new Texture2D[5];
+                    for (int i=0; i<islandTexts.Length; i++)
+                    {
+                        islandTexts[i] = game.Content.Load<Texture2D>("island" + (i+1));
+                    }
+                    //put islands on map
+                    List<Island> tempIslands = new List<Island>();
+                    for (int p=0; p<50; p++) //num of "passes"
+                    {
+                        int textInd = rand.Next(islandTexts.Length);
+                        int tryX = rand.Next(edgeIslandBuffer, mapWidth-edgeIslandBuffer-(int)(islandTexts[textInd].Width*islandScale));
+                        int tryY = rand.Next(edgeIslandBuffer, mapHeight - edgeIslandBuffer - (int)(islandTexts[textInd].Height * islandScale));
+                        //test for collisions with other islands
+                        bool collides = false;
+                        Rectangle potential = new Rectangle(tryX, tryY, (int)(islandTexts[textInd].Width * islandScale), (int)(islandTexts[textInd].Height * islandScale));
+                        for (int b=0; b<tempIslands.Count(); b++)
+                        {
+                            if (tempIslands[b].isloc.Intersects(potential))
+                            {
+                                collides = true;
+                                break;
+                            }
+                        }
+                        if (!collides)
+                        {
+                            tempIslands.Add(new Island(potential, islandTexts[textInd]));
+                        }
+                    }
+                    islands = new Island[tempIslands.Count()];
+                    for (int b=0; b<tempIslands.Count(); b++)
+                    {
+                        islands[b] = tempIslands[b];
+                    }
                     break;
             }
         }
@@ -75,9 +113,20 @@ namespace Main
             {
                 for (int c = 0; c < 2; c++)
                 {
-                    sb.Draw(waterT[r, c], new Rectangle(waterR[r, c].X-adjFact[0], waterR[r, c].Y - adjFact[1], waterR[r,c].Width, waterR[r,c].Height), Color.White);
-
+                    //sb.Draw(waterT[r, c], new Rectangle(waterR[r, c].X-adjFact[0], waterR[r, c].Y - adjFact[1], waterR[r,c].Width, waterR[r,c].Height),, Color.White);
+                    //if (Game1.screenR.Intersects(new Rectangle(waterR[r, c].X - adjFact[0], waterR[r, c].Y - adjFact[1],(int) (waterT[r, c].Width * Game1.viewingScale), (int)(waterT[r, c].Width * Game1.viewingScale))))
+                    //{
+                        sb.Draw(waterT[r, c], new Vector2(waterR[r, c].X - adjFact[0], waterR[r, c].Y - adjFact[1]), new Rectangle(0, 0, waterT[r, c].Width, waterT[r, c].Height), Color.White, 0, new Vector2(0, 0), Game1.viewingScale, SpriteEffects.None, 0);
+                    //}
                 }
+            }
+        }
+
+        private void drawIslands()
+        {
+            for (int i=0; i<islands.Length; i++)
+            {
+                islands[i].render();
             }
         }
 
@@ -86,6 +135,7 @@ namespace Main
         {
             //render background
             drawWater();
+            drawIslands();
         }
 
     }

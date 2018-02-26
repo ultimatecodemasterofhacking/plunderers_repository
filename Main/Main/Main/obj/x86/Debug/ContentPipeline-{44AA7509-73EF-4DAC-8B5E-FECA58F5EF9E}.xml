@@ -7,8 +7,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-0-0.xnb</Output>
-      <Time>2018-02-01T15:40:17.539347-06:00</Time>
+      <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-0-0.xnb</Output>
+      <Time>2018-02-15T16:11:49.4496615-06:00</Time>
     </Item>
     <Item>
       <Source>ocean-0-1.jpg</Source>
@@ -16,8 +16,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-0-1.xnb</Output>
-      <Time>2018-02-01T15:40:17.5973528-06:00</Time>
+      <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-0-1.xnb</Output>
+      <Time>2018-02-15T16:11:49.4591686-06:00</Time>
     </Item>
     <Item>
       <Source>ocean-1-0.jpg</Source>
@@ -25,8 +25,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-1-0.xnb</Output>
-      <Time>2018-02-01T15:40:17.6523583-06:00</Time>
+      <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-1-0.xnb</Output>
+      <Time>2018-02-15T16:11:49.4771848-06:00</Time>
     </Item>
     <Item>
       <Source>ocean-1-1.jpg</Source>
@@ -34,8 +34,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-1-1.xnb</Output>
-      <Time>2018-02-01T15:40:17.7133644-06:00</Time>
+      <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ocean-1-1.xnb</Output>
+      <Time>2018-02-15T16:11:49.4851831-06:00</Time>
     </Item>
     <Item>
       <Source>ship1.png</Source>
@@ -43,8 +43,53 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ship1.xnb</Output>
-      <Time>2018-02-01T15:49:34.1031348-06:00</Time>
+      <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ship1.xnb</Output>
+      <Time>2018-02-15T16:11:49.5011852-06:00</Time>
+    </Item>
+    <Item>
+      <Source>island1.png</Source>
+      <Name>island1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island1.xnb</Output>
+      <Time>2018-02-20T15:48:03.1409154-06:00</Time>
+    </Item>
+    <Item>
+      <Source>island2.png</Source>
+      <Name>island2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island2.xnb</Output>
+      <Time>2018-02-20T15:48:03.1629276-06:00</Time>
+    </Item>
+    <Item>
+      <Source>island3.png</Source>
+      <Name>island3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island3.xnb</Output>
+      <Time>2018-02-20T15:48:03.1699323-06:00</Time>
+    </Item>
+    <Item>
+      <Source>island4.png</Source>
+      <Name>island4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island4.xnb</Output>
+      <Time>2018-02-20T15:48:03.1749351-06:00</Time>
+    </Item>
+    <Item>
+      <Source>island5.png</Source>
+      <Name>island5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island5.xnb</Output>
+      <Time>2018-02-20T15:48:03.1829574-06:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
@@ -53,10 +98,10 @@
       <TargetProfile>Reach</TargetProfile>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
-      <RootDirectory>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\MainContent\</RootDirectory>
-      <LoggerRootDirectory>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\</LoggerRootDirectory>
-      <IntermediateDirectory>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\obj\x86\Debug\</IntermediateDirectory>
-      <OutputDirectory>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\</OutputDirectory>
+      <RootDirectory>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\MainContent\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\</OutputDirectory>
     </Settings>
     <Assemblies>
       <Assembly>
@@ -84,8 +129,8 @@
         <Value>2011-09-01T16:22:30-05:00</Value>
       </Assembly>
       <Assembly>
-        <Key>C:\Windows\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
-        <Value>2017-05-17T12:17:11.6083928-05:00</Value>
+        <Key>C:\WINDOWS\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2018-01-06T01:57:52.6244704-06:00</Value>
       </Assembly>
     </Assemblies>
   </Asset>

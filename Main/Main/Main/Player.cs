@@ -40,7 +40,7 @@ namespace Main
             this.map = map;
             charForm = false;
             this.shipType = shipType;
-            shipScale = .20f;
+            shipScale = .15f;
             charScale = .1f;
             targetDest[0] = -1;
             targetDest[1] = -1;
@@ -64,8 +64,8 @@ namespace Main
                 case 1:
                     shipR.X = Game1.dim[0] / 2 - shipR.Width / 2;
                     shipR.Y = Game1.dim[1] / 2 - shipR.Height / 2; ;
-                    map.adjFact[0] = 0;
-                    map.adjFact[1] = 0;
+                    Map.adjFact[0] = 0;
+                    Map.adjFact[1] = 0;
                     currSheading = 0;
                     destSheading = 0;
                     break;
@@ -80,7 +80,7 @@ namespace Main
 
         public int[] centerRelScreen()
         {
-            int[] cent = { shipR.X + shipR.Width / 2 - map.adjFact[0], shipR.Y + shipR.Height / 2 - map.adjFact[1] };
+            int[] cent = { shipR.X + shipR.Width / 2 - Map.adjFact[0], shipR.Y + shipR.Height / 2 - Map.adjFact[1] };
             return cent;
         }
 
@@ -244,9 +244,9 @@ namespace Main
 
         public void setTarget(int mX, int mY)
         {
-            potDest[0] = mX + map.adjFact[0];
+            potDest[0] = mX + Map.adjFact[0];
 
-            potDest[1] = mY + map.adjFact[1];
+            potDest[1] = mY + Map.adjFact[1];
             int[] pCent = centerOnMap();
             decellMode = false;
             if (shipSpeed<1)
@@ -301,32 +301,32 @@ namespace Main
         {
             for (int i=0; i<2; i++)
             {
-                if (map.adjFact[i] <= 0) // onLeft
+                if (Map.adjFact[i] <= 0) // onLeft
                 {
-                    map.adjFact[i] = 0;
+                    Map.adjFact[i] = 0;
                     if (centerRelScreen()[i] >= Game1.dim[i] / 2)
                     {
-                        map.adjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2;
+                        Map.adjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2;
                     }
                 }
-                else if (map.adjFact[i] >= map.maxAdjFact[i]) //onRight
+                else if (Map.adjFact[i] >= Map.maxAdjFact[i]) //onRight
                 {
-                    map.adjFact[i] = map.maxAdjFact[i];
+                    Map.adjFact[i] = Map.maxAdjFact[i];
                     Console.WriteLine("Scrolling");
                     if (centerRelScreen()[i] <= Game1.dim[i] / 2)
                     {
                         
-                        map.adjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2;
+                        Map.adjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2;
                     }
                 } else
                 {
                     switch (i)
                     {
                         case 0:
-                            map.adjFact[i] += xAmt;
+                            Map.adjFact[i] += xAmt;
                             break;
                         case 1:
-                            map.adjFact[i] += yAmt;
+                            Map.adjFact[i] += yAmt;
                             break;
                     }
                 }
@@ -336,7 +336,8 @@ namespace Main
 
         public void render ()
         {
-            sb.Draw(shipT[shipInd],new Rectangle(shipR.X -map.adjFact[0], shipR.Y -map.adjFact[1], shipR.Width, shipR.Height), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, shipHeadingRad, new Vector2(shipR.Width/2, shipR.Height/2), SpriteEffects.None, 0);
+            //sb.Draw(shipT[shipInd],new Rectangle(shipR.X -map.adjFact[0], shipR.Y -map.adjFact[1], shipR.Width, shipR.Height), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, shipHeadingRad, new Vector2(shipR.Width/2, shipR.Height/2), SpriteEffects.None, 0);
+            sb.Draw(shipT[shipInd], new Vector2(shipR.X - Map.adjFact[0], shipR.Y - Map.adjFact[1]), new Rectangle(0, 0, shipT[shipInd].Width, shipT[shipInd].Height), Color.White, shipHeadingRad, new Vector2(shipR.Width / 2, shipR.Height / 2), Game1.viewingScale*shipScale, SpriteEffects.None, 0);
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Main
     /// <summary>
     /// This is the main type for your game
     /// </summary>
+    
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
@@ -21,6 +22,7 @@ namespace Main
         public static int[] dim = new int[2];
         Map map;
         Player play;
+        public static float viewingScale = 1.0f;
 
         int[] tPT; //target player traversal
 
