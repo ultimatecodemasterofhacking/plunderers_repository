@@ -124,6 +124,7 @@ namespace Main
 
                 normalizeShipHeading();
                 int[] pCent = centerOnMap();
+                pCent[0] += shipR.Width / 2; 
                 float goalHeading = 0;
                 /*
                 if (targetDest[0] > pCent[0])
@@ -135,6 +136,7 @@ namespace Main
                 }
                 */
                 goalHeading = (float)(Math.Atan(Math.Abs((targetDest[1] - pCent[1])) * 1.0 / Math.Abs((targetDest[0] - pCent[0]))));
+
                 if (goalHeading > Math.PI/2)
                 {
                     Console.WriteLine("PROBLEMMMMMMMMMMMMMMMM");
@@ -147,23 +149,23 @@ namespace Main
                     }
                     else
                     {
-                        goalHeading = (float)(Math.PI - goalHeading);
+                        goalHeading = (float)(Math.PI*2 - goalHeading);
                     }
                 }
                 else
                 {
                     if (targetDest[1] > pCent[1])
                     {
-                        goalHeading = (float)(Math.PI + goalHeading);
+                        goalHeading = (float)(Math.PI - goalHeading);
                     }
                     else
                     {
-                        goalHeading = (float)(2.0 * Math.PI - goalHeading);
+                        goalHeading = (float)(Math.PI + goalHeading);
                     }
                 }
 
-                float ccw = Math.Abs(goalHeading - shipHeadingRad);
-                float cw = Math.Abs(shipHeadingRad - goalHeading);
+                float cw = Math.Abs(goalHeading - shipHeadingRad);
+                float ccw = (float)(Math.Abs(Math.PI*2 - cw));
                 float min = ccw <= cw ? ccw : cw;
                 bool clockwise = cw <= ccw ? true : false;
 
@@ -196,9 +198,55 @@ namespace Main
 
         public int[] distroShipSpeed ()
         {
+            normalizeShipHeading();
             int[] amts = new int[2];
             amts[0] = (int)(shipSpeed * Math.Cos(shipHeadingRad));
             amts[1] = (int)(shipSpeed * Math.Sin(shipHeadingRad));
+            if (shipHeadingRad ==0)
+            {
+                amts[0] = (int)shipSpeed;
+                amts[1] = 0;
+            } else if (shipHeadingRad<=Math.PI/2)
+            {
+                if (shipHeadingRad == Math.PI/2)
+                {
+                    amts[1] = (int)shipSpeed;
+                    amts[0] = 0;
+                } else
+                {
+                    amts[0] = (int)(shipSpeed * Math.Cos(shipHeadingRad));
+                    amts[1] = (int)(shipSpeed * Math.Sin(shipHeadingRad));
+                }
+            } else if (shipHeadingRad<=Math.PI)
+            {
+                if (shipHeadingRad == Math.PI)
+                {
+                    amts[0] = -(int)shipSpeed;
+                    amts[1] = 0;
+                } else
+                {
+                    float lilAngle = (int)(Math.PI - shipHeadingRad);
+                    amts[0] = -(int)(shipSpeed * Math.Cos(lilAngle));
+                    amts[1] = (int)(shipSpeed * Math.Sin(lilAngle));
+                }
+            } else if (shipHeadingRad<=Math.PI*3/2)
+            {
+                if (shipHeadingRad == Math.PI*3/2)
+                {
+                    amts[1] = -(int)shipSpeed;
+                    amts[0] = 0;
+                } else
+                {
+                    float lilAngle = (int)(shipHeadingRad - Math.PI);
+                    amts[0] = -(int)(shipSpeed * Math.Cos(lilAngle));
+                    amts[1] = -(int)(shipSpeed * Math.Sin(lilAngle));
+                }
+            } else if (shipHeadingRad < Math.PI*2)
+            {
+                float lilAngle = (int)(Math.PI*2 - shipHeadingRad);
+                amts[0] = (int)(shipSpeed * Math.Cos(lilAngle));
+                amts[1] = -(int)(shipSpeed * Math.Sin(lilAngle));
+            }
             return amts;
         }
 
