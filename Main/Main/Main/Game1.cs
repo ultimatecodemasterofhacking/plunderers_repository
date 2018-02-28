@@ -105,7 +105,7 @@ namespace Main
             }
 
             play.move();
-            Console.WriteLine(play.shipSpeed);
+            //Console.WriteLine(play.shipSpeed);
 
             base.Update(gameTime);
         }

@@ -36,8 +36,10 @@ namespace Main
         private int shipInd = 0;
         private float currSheading = 0;
         private float destSheading = 0;
-        private float shipTurnSpeed = .025f;
+        private float shipTurnSpeed = .05f;
         private float shipTurnErrorMargin = .1f;
+        private float shipX = 0;
+        private float shipY = 0;
 
         public Player (int shipType, int pNum, Map map)
         {
@@ -70,8 +72,12 @@ namespace Main
                 case 1:
                     shipR.X = Game1.dim[0] / 2 - shipR.Width / 2;
                     shipR.Y = Game1.dim[1] / 2 - shipR.Height / 2; ;
+                    shipX = shipR.X;
+                    shipY = shipR.Y;
                     map.adjFact[0] = 0;
                     map.adjFact[1] = 0;
+                    map.preciseAdjFact[0] = 0;
+                    map.preciseAdjFact[1] = 0;
                     currSheading = 0;
                     destSheading = 0;
                     break;
@@ -103,7 +109,7 @@ namespace Main
                 
             } else
             {
-                Console.WriteLine("hapnin");
+                //Console.WriteLine("hapnin");
 
                 shipSpeed += shipDeccel;
                 if (shipSpeed < 0)
@@ -124,7 +130,7 @@ namespace Main
 
                 normalizeShipHeading();
                 int[] pCent = centerOnMap();
-                pCent[0] += shipR.Width / 2; 
+                //pCent[0] += shipR.Width / 2; 
                 float goalHeading = 0;
                 /*
                 if (targetDest[0] > pCent[0])
@@ -135,44 +141,58 @@ namespace Main
                     goalHeading = (float)((Math.Atan((targetDest[1] - pCent[1]) * 1.0 / (targetDest[0] - pCent[0]))));
                 }
                 */
-                goalHeading = (float)(Math.Atan(Math.Abs((targetDest[1] - pCent[1])) * 1.0 / Math.Abs((targetDest[0] - pCent[0]))));
+                goalHeading = (float)(Math.Atan(Math.Abs((targetDest[1] - pCent[1])) * 1.0 / Math.Abs(targetDest[0] - pCent[0])));
 
-                if (goalHeading > Math.PI/2)
+                if (goalHeading > Math.PI/2 || goalHeading < 0)
                 {
                     Console.WriteLine("PROBLEMMMMMMMMMMMMMMMM");
                 }
                 if (targetDest[0] > pCent[0])
                 {
-                    if (targetDest[1] > pCent[1])
+                    if (targetDest[1] < pCent[1])
                     {
                         //do nothing
+                       // Console.WriteLine("Case 1");
                     }
                     else
                     {
                         goalHeading = (float)(Math.PI*2 - goalHeading);
+                       // Console.WriteLine("Case 2");
                     }
                 }
                 else
                 {
-                    if (targetDest[1] > pCent[1])
+                    if (targetDest[1] < pCent[1])
                     {
                         goalHeading = (float)(Math.PI - goalHeading);
+                        //Console.WriteLine("Case 3");
                     }
                     else
                     {
                         goalHeading = (float)(Math.PI + goalHeading);
+                        //Console.WriteLine("Case 4");
                     }
                 }
 
                 float cw = Math.Abs(goalHeading - shipHeadingRad);
-                float ccw = (float)(Math.Abs(Math.PI*2 - cw));
+                float ccw = (float)(Math.Abs(Math.PI * 2 - cw));
+                if (shipHeadingRad >= goalHeading)
+                {
+                    cw = shipHeadingRad - goalHeading;
+                    ccw = (float)(Math.PI * 2 - cw);
+                } else
+                {
+                    ccw = goalHeading - shipHeadingRad;
+                    cw = (float)(Math.PI * 2 - cw);
+                }
+                
                 float min = ccw <= cw ? ccw : cw;
-                bool clockwise = cw <= ccw ? true : false;
-
-                Console.WriteLine("clockwise is " + clockwise);
-                Console.WriteLine("SH " + shipHeadingRad);
-                Console.WriteLine("GH " + goalHeading);
-                Console.WriteLine("Rad to Overcome: " + min);
+                bool clockwise = ccw <= cw ? false : true;
+                //Console.WriteLine("begin rot ---");
+               // Console.WriteLine("clockwise is " + clockwise);
+                //Console.WriteLine("SH " + shipHeadingRad);
+               // Console.WriteLine("GH " + goalHeading);
+              //  Console.WriteLine("Rad to Overcome: " + min);
                 if (min > shipTurnErrorMargin)
                 {
 
@@ -187,65 +207,65 @@ namespace Main
                 }
                 else
                 {
-                    Console.WriteLine("*Heading spot on");
+                  //  Console.WriteLine("*Heading spot on");
                 }
             } else
             {
-                Console.WriteLine("ship speed is zero");
+               // Console.WriteLine("ship speed is zero");
             }
             //testing shipHeadingRad = (float)(Math.PI / 3);
         }
 
-        public int[] distroShipSpeed ()
+        public float[] distroShipSpeed ()
         {
             normalizeShipHeading();
-            int[] amts = new int[2];
-            amts[0] = (int)(shipSpeed * Math.Cos(shipHeadingRad));
-            amts[1] = (int)(shipSpeed * Math.Sin(shipHeadingRad));
+            float[] amts = new float[2];
+            amts[0] = (float)(shipSpeed * Math.Cos(shipHeadingRad));
+            amts[1] = (float)(shipSpeed * Math.Sin(shipHeadingRad));
             if (shipHeadingRad ==0)
             {
-                amts[0] = (int)shipSpeed;
+                amts[0] = shipSpeed;
                 amts[1] = 0;
             } else if (shipHeadingRad<=Math.PI/2)
             {
                 if (shipHeadingRad == Math.PI/2)
                 {
-                    amts[1] = (int)shipSpeed;
+                    amts[1] = shipSpeed;
                     amts[0] = 0;
                 } else
                 {
-                    amts[0] = (int)(shipSpeed * Math.Cos(shipHeadingRad));
-                    amts[1] = (int)(shipSpeed * Math.Sin(shipHeadingRad));
+                    amts[0] = (float)(shipSpeed * Math.Cos(shipHeadingRad));
+                    amts[1] = -(float)(shipSpeed * Math.Sin(shipHeadingRad));
                 }
             } else if (shipHeadingRad<=Math.PI)
             {
                 if (shipHeadingRad == Math.PI)
                 {
-                    amts[0] = -(int)shipSpeed;
+                    amts[0] = -shipSpeed;
                     amts[1] = 0;
                 } else
                 {
-                    float lilAngle = (int)(Math.PI - shipHeadingRad);
-                    amts[0] = -(int)(shipSpeed * Math.Cos(lilAngle));
-                    amts[1] = (int)(shipSpeed * Math.Sin(lilAngle));
+                    float lilAngle = (float)(Math.PI - shipHeadingRad);
+                    amts[0] = -(float)(shipSpeed * Math.Cos(lilAngle));
+                    amts[1] = -(float)(shipSpeed * Math.Sin(lilAngle));
                 }
             } else if (shipHeadingRad<=Math.PI*3/2)
             {
                 if (shipHeadingRad == Math.PI*3/2)
                 {
-                    amts[1] = -(int)shipSpeed;
+                    amts[1] = -shipSpeed;
                     amts[0] = 0;
                 } else
                 {
-                    float lilAngle = (int)(shipHeadingRad - Math.PI);
-                    amts[0] = -(int)(shipSpeed * Math.Cos(lilAngle));
-                    amts[1] = -(int)(shipSpeed * Math.Sin(lilAngle));
+                    float lilAngle = (float)(shipHeadingRad - Math.PI);
+                    amts[0] = -(float)(shipSpeed * Math.Cos(lilAngle));
+                    amts[1] = (float)(shipSpeed * Math.Sin(lilAngle));
                 }
             } else if (shipHeadingRad < Math.PI*2)
             {
-                float lilAngle = (int)(Math.PI*2 - shipHeadingRad);
-                amts[0] = (int)(shipSpeed * Math.Cos(lilAngle));
-                amts[1] = -(int)(shipSpeed * Math.Sin(lilAngle));
+                float lilAngle = (float)(Math.PI*2 - shipHeadingRad);
+                amts[0] = (float)(shipSpeed * Math.Cos(lilAngle));
+                amts[1] = (float)(shipSpeed * Math.Sin(lilAngle));
             }
             return amts;
         }
@@ -265,9 +285,9 @@ namespace Main
                     
                     manageShipHeading();
                     manageShipSpeed();
-                    int[] amts = distroShipSpeed();
-                    int xAmt = amts[0];
-                    int yAmt = amts[1];
+                    float[] amts = distroShipSpeed();
+                    float xAmt = amts[0];
+                    float yAmt = amts[1];
                     int[] pCent = centerOnMap();
                     /* -------------------------------------
                     
@@ -305,10 +325,10 @@ namespace Main
                     */ //------------------------------------
 
                     //
-                    int tempShipRX = shipR.X;
-                    int tempShipRY = shipR.Y;
-                    tempShipRX += (int)xAmt;
-                    tempShipRY += (int)yAmt;
+                    float tempShipRX = shipX;
+                    float tempShipRY = shipY;
+                    tempShipRX += xAmt;
+                    tempShipRY += yAmt;
                     
                     //ensure move is within boundaries
                     if (tempShipRX < 0)
@@ -341,12 +361,14 @@ namespace Main
                     }
                     //determine adjustment factor for rendering
                     //Console.WriteLine("real amounts of movement: " + xAmt + " " + yAmt);
-                    shipR.X = tempShipRX;
-                    shipR.Y = tempShipRY;
+                    shipR.X = (int)tempShipRX;
+                    shipR.Y = (int)tempShipRY;
+                    shipX = tempShipRX;
+                    shipY = tempShipRY;
 
                     //map.adjFact[0] += (int)xAmt;
                     //map.adjFact[1] += (int)yAmt;
-                    ensureCameraWithinBoundaries((int)xAmt, (int)yAmt);
+                    ensureCameraWithinBoundaries(xAmt, yAmt);
                     if (pCent[0] < targetDest[0]+moveErrorMargin && pCent[0]> targetDest[0] - moveErrorMargin && pCent[1] < targetDest[1] + moveErrorMargin && pCent[1] > targetDest[1] - moveErrorMargin)
                     {
                         if (!decellMode)
@@ -453,40 +475,44 @@ namespace Main
             
         }
 
-        public void ensureCameraWithinBoundaries (int xAmt, int yAmt)
+        public void ensureCameraWithinBoundaries (float xAmt, float yAmt)
         {
             for (int i=0; i<2; i++)
             {
-                if (map.adjFact[i] <= 0) // onLeft
+                if (map.preciseAdjFact[i] <= 0) // onLeft
                 {
-                    map.adjFact[i] = 0;
+                    map.preciseAdjFact[i] = 0;
+
                     if (centerRelScreen()[i] >= Game1.dim[i] / 2)
                     {
-                        map.adjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2;
+                        map.preciseAdjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2;
                     }
                 }
-                else if (map.adjFact[i] >= map.maxAdjFact[i]) //onRight
+                else if (map.preciseAdjFact[i] >= map.maxAdjFact[i]) //onRight
                 {
-                    map.adjFact[i] = map.maxAdjFact[i];
+                    map.preciseAdjFact[i] = map.maxAdjFact[i];
                     //Console.WriteLine("Scrolling");
                     if (centerRelScreen()[i] <= Game1.dim[i] / 2)
                     {
                         
-                        map.adjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2;
+                        map.preciseAdjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2;
                     }
                 } else
                 {
                     switch (i)
                     {
                         case 0:
-                            map.adjFact[i] += xAmt;
+                            map.preciseAdjFact[i] += xAmt;
                             break;
                         case 1:
-                            map.adjFact[i] += yAmt;
+                            map.preciseAdjFact[i] += yAmt;
                             break;
                     }
+                    
                 }
             }
+            map.adjFact[0] = (int)map.preciseAdjFact[0];
+            map.adjFact[1] = (int)map.preciseAdjFact[1];
         }
 
 

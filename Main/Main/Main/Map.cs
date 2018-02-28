@@ -23,6 +23,7 @@ namespace Main
         public int mapHeight = 0;
         public int[] adjFact;
         public int[] maxAdjFact;
+        public float[] preciseAdjFact;
 
 
         public Map(int type, int seed)
@@ -30,6 +31,7 @@ namespace Main
             rand = new Random(seed);
             this.type = type;
             adjFact = new int[2]; //for rendering the map centered on player
+            preciseAdjFact = new float[2];
             maxAdjFact = new int[2];
             //generate random map
             switch (type)
