@@ -24,7 +24,7 @@ namespace Main
         public float shipSpeedY = 0;
         public float shipSpeed = 0;
         private float maxShipSpeed = 8;
-        private float shipDeccel = -.08f;
+        private float shipDeccel = -.06f;
         private float shipAcc = .08f;
         private Map map;
         private int[] targetDest = new int[2];
@@ -34,12 +34,12 @@ namespace Main
         private bool decellMode = false;
         private float shipHeadingRad = 0;
         private int shipInd = 0;
-        private float currSheading = 0;
-        private float destSheading = 0;
-        private float shipTurnSpeed = .05f;
+        private float shipTurnSpeed = 0;
+        private float maxShipTurnSpeed = .05f;
         private float shipTurnErrorMargin = .1f;
         private float shipX = 0;
         private float shipY = 0;
+        private float shipGoalHeading = 0;
 
         public Player (int shipType, int pNum, Map map)
         {
@@ -57,6 +57,8 @@ namespace Main
             shipSpeedY = 0;
             decellMode = false;
             shipHeadingRad = 0;
+            shipTurnSpeed = .05f;
+            
             switch(shipType)
             {
                 case 0:
@@ -78,8 +80,8 @@ namespace Main
                     map.adjFact[1] = 0;
                     map.preciseAdjFact[0] = 0;
                     map.preciseAdjFact[1] = 0;
-                    currSheading = 0;
-                    destSheading = 0;
+                    shipHeadingRad = 0;
+                    shipGoalHeading = -1;
                     break;
             }
         }
@@ -127,93 +129,57 @@ namespace Main
         {
             if (shipSpeed != 0)
             {
-
-                normalizeShipHeading();
-                int[] pCent = centerOnMap();
-                //pCent[0] += shipR.Width / 2; 
-                float goalHeading = 0;
-                /*
-                if (targetDest[0] > pCent[0])
-                {
-                    goalHeading =(float)( Math.Atan((targetDest[1] - pCent[1]) * 1.0 / (targetDest[0]-pCent[0])));
-                } else
-                {
-                    goalHeading = (float)((Math.Atan((targetDest[1] - pCent[1]) * 1.0 / (targetDest[0] - pCent[0]))));
-                }
-                */
-                goalHeading = (float)(Math.Atan(Math.Abs((targetDest[1] - pCent[1])) * 1.0 / Math.Abs(targetDest[0] - pCent[0])));
-
-                if (goalHeading > Math.PI/2 || goalHeading < 0)
-                {
-                    Console.WriteLine("PROBLEMMMMMMMMMMMMMMMM");
-                }
-                if (targetDest[0] > pCent[0])
-                {
-                    if (targetDest[1] < pCent[1])
-                    {
-                        //do nothing
-                       // Console.WriteLine("Case 1");
-                    }
-                    else
-                    {
-                        goalHeading = (float)(Math.PI*2 - goalHeading);
-                       // Console.WriteLine("Case 2");
-                    }
-                }
-                else
-                {
-                    if (targetDest[1] < pCent[1])
-                    {
-                        goalHeading = (float)(Math.PI - goalHeading);
-                        //Console.WriteLine("Case 3");
-                    }
-                    else
-                    {
-                        goalHeading = (float)(Math.PI + goalHeading);
-                        //Console.WriteLine("Case 4");
-                    }
-                }
-
-                float cw = Math.Abs(goalHeading - shipHeadingRad);
-                float ccw = (float)(Math.Abs(Math.PI * 2 - cw));
-                if (shipHeadingRad >= goalHeading)
-                {
-                    cw = shipHeadingRad - goalHeading;
-                    ccw = (float)(Math.PI * 2 - cw);
-                } else
-                {
-                    ccw = goalHeading - shipHeadingRad;
-                    cw = (float)(Math.PI * 2 - cw);
-                }
+                Console.WriteLine("ship goal heading " + shipGoalHeading);
                 
-                float min = ccw <= cw ? ccw : cw;
-                bool clockwise = ccw <= cw ? false : true;
-                //Console.WriteLine("begin rot ---");
-               // Console.WriteLine("clockwise is " + clockwise);
-                //Console.WriteLine("SH " + shipHeadingRad);
-               // Console.WriteLine("GH " + goalHeading);
-              //  Console.WriteLine("Rad to Overcome: " + min);
-                if (min > shipTurnErrorMargin)
+                if (shipGoalHeading != -1)
                 {
 
-                    if (clockwise)
+                    
+
+                    float cw = Math.Abs(shipGoalHeading - shipHeadingRad);
+                    float ccw = (float)(Math.Abs(Math.PI * 2 - cw));
+                    if (shipHeadingRad >= shipGoalHeading)
                     {
-                        shipHeadingRad -= shipTurnSpeed;
+                        cw = shipHeadingRad - shipGoalHeading;
+                        ccw = (float)(Math.PI * 2 - cw);
                     }
                     else
                     {
-                        shipHeadingRad += shipTurnSpeed;
+                        ccw = shipGoalHeading - shipHeadingRad;
+                        cw = (float)(Math.PI * 2 - cw);
+                    }
+
+                    float min = ccw <= cw ? ccw : cw;
+                    bool clockwise = ccw <= cw ? false : true;
+                    //Console.WriteLine("begin rot ---");
+                    // Console.WriteLine("clockwise is " + clockwise);
+                    //Console.WriteLine("SH " + shipHeadingRad);
+                    // Console.WriteLine("GH " + goalHeading);
+                    //  Console.WriteLine("Rad to Overcome: " + min);
+                    if (min > shipTurnErrorMargin)
+                    {
+
+                        if (clockwise)
+                        {
+                            shipHeadingRad -= shipTurnSpeed;
+                        }
+                        else
+                        {
+                            shipHeadingRad += shipTurnSpeed;
+                        }
+                    }
+                    else
+                    {
+                        //  Console.WriteLine("*Heading spot on");
+                        shipGoalHeading = -1;
                     }
                 }
                 else
                 {
-                  //  Console.WriteLine("*Heading spot on");
+                    // Console.WriteLine("ship speed is zero");
                 }
-            } else
-            {
-               // Console.WriteLine("ship speed is zero");
+                //testing shipHeadingRad = (float)(Math.PI / 3);
             }
-            //testing shipHeadingRad = (float)(Math.PI / 3);
         }
 
         public float[] distroShipSpeed ()
@@ -412,6 +378,15 @@ namespace Main
                 shipHeadingRad = (float)(shipHeadingRad + Math.PI * 2);
             }
         }
+        public void normalizeShipGoalHeading()
+        {
+
+            shipGoalHeading = (float)(shipGoalHeading % (Math.PI * 2));
+            if (shipGoalHeading < 0)
+            {
+                shipGoalHeading = (float)(shipGoalHeading + Math.PI * 2);
+            }
+        }
 
         public void shipNoClick ()
         {
@@ -472,7 +447,54 @@ namespace Main
             }
             targetDest[0] = potDest[0];
             targetDest[1] = potDest[1];
+
+            normalizeShipHeading();
             
+            //pCent[0] += shipR.Width / 2; 
+            float goalHeading = 0;
+            /*
+            if (targetDest[0] > pCent[0])
+            {
+                goalHeading =(float)( Math.Atan((targetDest[1] - pCent[1]) * 1.0 / (targetDest[0]-pCent[0])));
+            } else
+            {
+                goalHeading = (float)((Math.Atan((targetDest[1] - pCent[1]) * 1.0 / (targetDest[0] - pCent[0]))));
+            }
+            */
+            goalHeading = (float)(Math.Atan(Math.Abs((targetDest[1] - pCent[1])) * 1.0 / Math.Abs(targetDest[0] - pCent[0])));
+
+            if (goalHeading > Math.PI / 2 || goalHeading < 0)
+            {
+                Console.WriteLine("PROBLEM GOAL: " + goalHeading);
+            }
+            if (targetDest[0] > pCent[0])
+            {
+                if (targetDest[1] < pCent[1])
+                {
+                    //do nothing
+                    // Console.WriteLine("Case 1");
+                }
+                else
+                {
+                    goalHeading = (float)(Math.PI * 2 - goalHeading);
+                    // Console.WriteLine("Case 2");
+                }
+            }
+            else
+            {
+                if (targetDest[1] < pCent[1])
+                {
+                    goalHeading = (float)(Math.PI - goalHeading);
+                    //Console.WriteLine("Case 3");
+                }
+                else
+                {
+                    goalHeading = (float)(Math.PI + goalHeading);
+                    //Console.WriteLine("Case 4");
+                }
+            }
+            shipGoalHeading = goalHeading;
+
         }
 
         public void ensureCameraWithinBoundaries (float xAmt, float yAmt)
