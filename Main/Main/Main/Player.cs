@@ -129,7 +129,7 @@ namespace Main
         {
             if (shipSpeed != 0)
             {
-                Console.WriteLine("ship goal heading " + shipGoalHeading);
+                //Console.WriteLine("ship goal heading " + shipGoalHeading);
                 
                 if (shipGoalHeading != -1)
                 {
@@ -378,15 +378,7 @@ namespace Main
                 shipHeadingRad = (float)(shipHeadingRad + Math.PI * 2);
             }
         }
-        public void normalizeShipGoalHeading()
-        {
-
-            shipGoalHeading = (float)(shipGoalHeading % (Math.PI * 2));
-            if (shipGoalHeading < 0)
-            {
-                shipGoalHeading = (float)(shipGoalHeading + Math.PI * 2);
-            }
-        }
+     
 
         public void shipNoClick ()
         {
