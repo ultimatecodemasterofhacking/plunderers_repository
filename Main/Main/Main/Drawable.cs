@@ -17,6 +17,8 @@ namespace Main
         protected static Game game;
         protected static int width;
         protected static int height;
+        protected static Map map;
+
 
         public static void setup (SpriteBatch ssbb, Game g, int w, int h)
         {
@@ -24,6 +26,11 @@ namespace Main
             game = g;
             width = w;
             height = h;
+        }
+
+        public static void setMap (Map m)
+        {
+            map = m;
         }
 
         

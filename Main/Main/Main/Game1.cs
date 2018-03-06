@@ -23,6 +23,7 @@ namespace Main
         Map map;
         Player play;
         public static float viewingScale = 1.0f;
+        public static Rectangle screenR;
 
         int[] tPT; //target player traversal
 
@@ -35,6 +36,7 @@ namespace Main
             dim[1] = 800;
             graphics.PreferredBackBufferWidth = dim[0];
             graphics.PreferredBackBufferHeight = dim[1];
+            screenR = new Rectangle(0, 0, dim[0], dim[1]);
         }
 
         /// <summary>
@@ -61,7 +63,8 @@ namespace Main
             Drawable.setup(spriteBatch, this, dim[0], dim[1]);
             tPT = new int[2];
             map = new Map(0, 500);
-            play = new Main.Player(0, 1, map);
+            Drawable.setMap(map);
+            play = new Main.Player(0, 1);
             // TODO: use this.Content to load your game content here
         }
 

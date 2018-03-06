@@ -19,11 +19,14 @@ namespace Main
         private Rectangle[,] waterR;
         public int mapWidth = 0;
         public int mapHeight = 0;
-        public static int[] adjFact;
-        public static int[] maxAdjFact;
+        public int[] adjFact;
+        public int[] maxAdjFact;
         private Island[] islands;
         private int edgeIslandBuffer = 50;
         public static float islandScale;
+        public int waeY = 1;
+        public int waeX = 1;
+        public float[] preciseAdjFact;
 
 
         public Map(int type, int seed)
@@ -32,6 +35,7 @@ namespace Main
             this.type = type;
             adjFact = new int[2]; //for rendering the map centered on player
             maxAdjFact = new int[2];
+            preciseAdjFact = new float[2];
             //generate random map
             Texture2D[] islandTexts;
             switch (type)
