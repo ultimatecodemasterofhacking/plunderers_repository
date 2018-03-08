@@ -3,3 +3,8 @@ Content\ocean-0-1.xnb
 Content\ocean-1-0.xnb
 Content\ocean-1-1.xnb
 Content\ship1.xnb
+Content\island1.xnb
+Content\island2.xnb
+Content\island3.xnb
+Content\island4.xnb
+Content\island5.xnb

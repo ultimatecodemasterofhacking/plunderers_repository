@@ -46,6 +46,51 @@
       <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\ship1.xnb</Output>
       <Time>2018-02-01T15:49:34.1031348-06:00</Time>
     </Item>
+    <Item>
+      <Source>island1.png</Source>
+      <Name>island1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island1.xnb</Output>
+      <Time>2018-03-08T15:11:17.0739533-06:00</Time>
+    </Item>
+    <Item>
+      <Source>island2.png</Source>
+      <Name>island2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island2.xnb</Output>
+      <Time>2018-03-08T15:11:17.3235277-06:00</Time>
+    </Item>
+    <Item>
+      <Source>island3.png</Source>
+      <Name>island3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island3.xnb</Output>
+      <Time>2018-03-08T15:11:17.5263069-06:00</Time>
+    </Item>
+    <Item>
+      <Source>island4.png</Source>
+      <Name>island4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island4.xnb</Output>
+      <Time>2018-03-08T15:11:17.6042989-06:00</Time>
+    </Item>
+    <Item>
+      <Source>island5.png</Source>
+      <Name>island5</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island5.xnb</Output>
+      <Time>2018-03-08T15:11:17.9630621-06:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{44AA7509-73EF-4DAC-8B5E-FECA58F5EF9E}</ContentProjectGUID>

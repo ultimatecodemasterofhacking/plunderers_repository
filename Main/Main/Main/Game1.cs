@@ -21,6 +21,7 @@ namespace Main
         public static int[] dim = new int[2];
         Map map;
         Player play;
+        public static float viewingScale = 1.0f;
 
         int[] tPT; //target player traversal
 
@@ -57,9 +58,12 @@ namespace Main
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Drawable.setup(spriteBatch, this, dim[0], dim[1]);
+            map = new Map(0, new Random().Next(1000));
+            Drawable.setMap(map);
+            
             tPT = new int[2];
-            map = new Map(0, 500);
-            play = new Main.Player(0, 1, map);
+            
+            play = new Main.Player(0, 1);
             // TODO: use this.Content to load your game content here
         }
 

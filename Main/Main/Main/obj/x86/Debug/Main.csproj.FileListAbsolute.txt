@@ -40,3 +40,8 @@ C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Ma
 C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
 C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\obj\x86\Debug\Main.exe
 C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\obj\x86\Debug\Main.pdb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island1.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island2.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island3.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island4.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island5.xnb

@@ -26,7 +26,6 @@ namespace Main
         private float maxShipSpeed = 8;
         private float shipDeccel = -.06f;
         private float shipAcc = .08f;
-        private Map map;
         private int[] targetDest = new int[2];
         private static int moveErrorMargin = 12;
         private int[] potDest = new int[2];
@@ -41,9 +40,9 @@ namespace Main
         private float shipY = 0;
         private float shipGoalHeading = 0;
 
-        public Player (int shipType, int pNum, Map map)
+        public Player (int shipType, int pNum)
         {
-            this.map = map;
+
             charForm = false;
             this.shipType = shipType;
             shipScale = .20f;
