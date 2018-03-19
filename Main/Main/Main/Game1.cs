@@ -1,4 +1,4 @@
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+
+
 
 namespace Main
 {
@@ -56,6 +58,7 @@ namespace Main
         /// </summary>
         protected override void LoadContent()
         {
+            
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Drawable.setup(spriteBatch, this, dim[0], dim[1]);
@@ -116,6 +119,7 @@ namespace Main
             //Console.WriteLine(play.shipSpeed);
 
             base.Update(gameTime);
+            
             
         }
 
