@@ -83,6 +83,8 @@ namespace Main
                     shipGoalHeading = -1;
                     break;
             }
+
+            
         }
 
         public int[] centerOnMap ()
@@ -531,7 +533,9 @@ namespace Main
 
         public void render ()
         {
-            sb.Draw(shipT[shipInd],new Rectangle(shipR.X -map.adjFact[0], shipR.Y -map.adjFact[1], shipR.Width, shipR.Height), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), SpriteEffects.None, 0);
+            //sb.Draw(shipT[shipInd],new Rectangle(shipR.X -map.adjFact[0], shipR.Y -map.adjFact[1], shipR.Width, shipR.Height), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), SpriteEffects.None, 0);
+            sb.Draw(shipT[shipInd], new Vector2(shipR.X - map.adjFact[0], shipR.Y - map.adjFact[1]), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), Game1.viewingScale*shipScale, SpriteEffects.None, 0);
+
         }
     }
 }

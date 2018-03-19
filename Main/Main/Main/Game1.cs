@@ -22,6 +22,7 @@ namespace Main
         Map map;
         Player play;
         public static float viewingScale = 1.0f;
+        public static Rectangle viewingPort;
 
         int[] tPT; //target player traversal
 
@@ -58,7 +59,7 @@ namespace Main
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Drawable.setup(spriteBatch, this, dim[0], dim[1]);
-            map = new Map(0, new Random().Next(1000));
+            map = new Map(0, new Random().Next(5000));
             Drawable.setMap(map);
             
             tPT = new int[2];
@@ -97,6 +98,7 @@ namespace Main
                     if (ms.X >= 0 && ms.X <= dim[0] && ms.Y >= 0 && ms.Y <= dim[1])
                     {
                         play.setTarget(ms.X, ms.Y);
+                        
                     }
                     
                 }
@@ -107,11 +109,14 @@ namespace Main
                     play.shipNoClick();
                 }
             }
-
+            
             play.move();
+            //update viewing port in case player moved
+            Game1.viewingPort = new Rectangle(map.adjFact[0], map.adjFact[1], (int)(Game1.dim[0] * 1.0 /Game1.viewingScale) + 300, (int)(Game1.dim[1] * 1.0 /Game1.viewingScale) + 300);
             //Console.WriteLine(play.shipSpeed);
 
             base.Update(gameTime);
+            
         }
 
         /// <summary>
@@ -125,13 +130,18 @@ namespace Main
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
+
             map.render();
             play.render();
+
+            //for TESTING
+            
 
 
             spriteBatch.End();
 
             base.Draw(gameTime);
+            
         }
     }
 }

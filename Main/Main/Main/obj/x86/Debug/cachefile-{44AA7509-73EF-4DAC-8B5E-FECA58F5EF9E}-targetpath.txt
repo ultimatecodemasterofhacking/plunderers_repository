@@ -8,3 +8,4 @@ Content\island2.xnb
 Content\island3.xnb
 Content\island4.xnb
 Content\island5.xnb
+Content\testing_mask.xnb

@@ -91,6 +91,15 @@
       <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island5.xnb</Output>
       <Time>2018-03-08T15:11:17.9630621-06:00</Time>
     </Item>
+    <Item>
+      <Source>testing_mask.png</Source>
+      <Name>testing_mask</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\testing_mask.xnb</Output>
+      <Time>2018-03-19T15:34:48.5584541-05:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{44AA7509-73EF-4DAC-8B5E-FECA58F5EF9E}</ContentProjectGUID>

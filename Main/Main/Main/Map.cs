@@ -79,8 +79,8 @@ namespace Main
                     }
                     //put islands on map
                     List<Island> tempIslands = new List<Island>();
-                    Console.WriteLine(mapWidth + " is mapwidth");
-                    Console.WriteLine(mapHeight + " is mapHeight");
+                    //Console.WriteLine(mapWidth + " is mapwidth");
+                    //Console.WriteLine(mapHeight + " is mapHeight");
                     for (int p=0; p<50; p++)
                     {
                         int textInd = rand.Next(islandTexts.Length);
@@ -100,8 +100,8 @@ namespace Main
                         }
                         if (!collides)
                         {
-                            Console.WriteLine("xWorkd " + tryX);
-                            Console.WriteLine("yWorkd " + tryY);
+                            //Console.WriteLine("xWorkd " + tryX);
+                            //Console.WriteLine("yWorkd " + tryY);
                             tempIslands.Add(new Main.Island(potential, islandTexts[textInd]));
                         }
                     }
@@ -122,8 +122,12 @@ namespace Main
             {
                 for (int c = 0; c < 2; c++)
                 {
-                    sb.Draw(waterT[r, c], new Rectangle(waterR[r, c].X-adjFact[0], waterR[r, c].Y - adjFact[1], waterR[r,c].Width, waterR[r,c].Height), Color.White);
-
+                    //sb.Draw(waterT[r, c], new Rectangle(waterR[r, c].X-adjFact[0], waterR[r, c].Y - adjFact[1], waterR[r,c].Width, waterR[r,c].Height), Color.White);\
+                    if (Game1.viewingPort.Intersects(new Rectangle(waterR[r,c].X, waterR[r,c].Y, waterR[r,c].Width, waterR[r,c].Height)))
+                    {
+                        sb.Draw(waterT[r, c], new Vector2(waterR[r, c].X - adjFact[0], waterR[r, c].Y - adjFact[1]), new Rectangle(0, 0, waterT[r, c].Width, waterT[r, c].Height), Color.White, 0f, new Vector2(0, 0), Game1.viewingScale, SpriteEffects.None, 0);
+                    }
+                    
                 }
             }
         }
