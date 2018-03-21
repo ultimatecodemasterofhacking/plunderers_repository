@@ -27,10 +27,14 @@ namespace Main
         public static float islandScale;
         private int edgeIslandBuffer = 50;
         private Island[] islands;
+        public static List<Island> islandsToDraw = new List<Island>();
+        public static List<Island> islandsToDrawTemp = new List<Island>();
 
 
         public Map(int type, int seed)
         {
+            islandsToDraw = new List<Island>();
+            islandsToDrawTemp = new List<Island>();
             rand = new Random(seed);
             this.type = type;
             adjFact = new int[2]; //for rendering the map centered on player
@@ -114,6 +118,7 @@ namespace Main
             }
         }
 
+
         
 
         private void drawWater ()
@@ -133,10 +138,11 @@ namespace Main
         }
         private void drawIslands()
         {
-            for (int i=0; i<islands.Length; i++)
+            for (int i=0; i<islandsToDraw.Count; i++)
             {
-                islands[i].render();
+                islandsToDraw[i].render();
             }
+            Console.WriteLine("Drew " + islandsToDraw.Count + " islands out of " + islands.Length);
         }
 
         
@@ -145,6 +151,24 @@ namespace Main
             //render background
             drawWater();
             drawIslands();
+        }
+
+        private void decideIslands()
+        {
+            for (int i = 0; i < islands.Length; i++)
+            {
+                if (islands[i].decide())
+                {
+                    islandsToDrawTemp.Add(islands[i]);
+                }
+            }
+        }
+
+        public void decideWhatToDraw ()
+        {
+            islandsToDrawTemp = new List<Island>();
+            decideIslands();
+            islandsToDraw = islandsToDrawTemp;
         }
 
     }

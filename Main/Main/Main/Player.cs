@@ -39,6 +39,10 @@ namespace Main
         private float shipX = 0;
         private float shipY = 0;
         private float shipGoalHeading = 0;
+        private Color[] shipTextureData;
+        //testing variables
+        private bool testing = false;
+        private Texture2D tmT;
 
         public Player (int shipType, int pNum)
         {
@@ -57,14 +61,16 @@ namespace Main
             decellMode = false;
             shipHeadingRad = 0;
             shipTurnSpeed = .05f;
-            
-            switch(shipType)
+            tmT = game.Content.Load<Texture2D>("testing_mask");
+
+            switch (shipType)
             {
                 case 0:
                     shipInd = 0;
                     shipT = new Texture2D[1];
                     shipT[0] = game.Content.Load<Texture2D>("ship1");
-                    shipR = new Rectangle(0 , 0, (int)(shipT[0].Width * shipScale), (int)(shipT[0].Height*shipScale));
+                    shipR = new Rectangle(0, 0, (int)(shipT[0].Width * shipScale), (int)(shipT[0].Height * shipScale));
+                    shipTextureData = new Color[shipT[shipInd].Width * shipT[shipInd].Height];
                     
                     break;
             }
@@ -83,8 +89,9 @@ namespace Main
                     shipGoalHeading = -1;
                     break;
             }
+            shipTextureData = new Color[shipT[shipInd].Width * shipT[shipInd].Height];
+            shipT[shipInd].GetData(shipTextureData);
 
-            
         }
 
         public int[] centerOnMap ()
@@ -124,6 +131,60 @@ namespace Main
 
                 }
             }
+        }
+
+ 
+
+        public void collisionCheckMapStuff ()
+        {
+            int[] shipMapCent = centerOnMap();
+            Matrix shipMat =  Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) * Matrix.CreateScale(shipScale) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            Rectangle shipBoundingRect = CalculateBoundingRectangle(shipR, shipMat);
+            bool collision = false;
+            for (int i=0; i<Map.islandsToDraw.Count; i++)
+            {
+                if (shipBoundingRect.Intersects(Map.islandsToDraw[i].isloc))
+                {
+                    //time to do pixel perfect yeet
+                    Island isleToCheck = Map.islandsToDraw[i];
+                    Matrix islandMat = Matrix.CreateScale(Map.islandScale) * Matrix.CreateTranslation(isleToCheck.isloc.X, isleToCheck.isloc.Y, 0);
+                    collision = IntersectPixels(shipMat, shipT[shipInd].Width, shipT[shipInd].Height, shipTextureData, islandMat, isleToCheck.islandT.Width, isleToCheck.islandT.Height, isleToCheck.islandTextureData);
+                    if (collision)
+                    {
+                        Console.WriteLine("COLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        break;
+                    }
+                }
+            }
+            testing = collision;
+
+
+        }
+
+        public static Rectangle CalculateBoundingRectangle(Rectangle rectangle,
+                                                           Matrix transform)
+        {
+            // Get all four corners in local space
+            Vector2 leftTop = new Vector2(rectangle.Left, rectangle.Top);
+            Vector2 rightTop = new Vector2(rectangle.Right, rectangle.Top);
+            Vector2 leftBottom = new Vector2(rectangle.Left, rectangle.Bottom);
+            Vector2 rightBottom = new Vector2(rectangle.Right, rectangle.Bottom);
+
+            // Transform all four corners into work space
+            Vector2.Transform(ref leftTop, ref transform, out leftTop);
+            Vector2.Transform(ref rightTop, ref transform, out rightTop);
+            Vector2.Transform(ref leftBottom, ref transform, out leftBottom);
+            Vector2.Transform(ref rightBottom, ref transform, out rightBottom);
+
+            // Find the minimum and maximum extents of the rectangle in world space
+            Vector2 min = Vector2.Min(Vector2.Min(leftTop, rightTop),
+                                      Vector2.Min(leftBottom, rightBottom));
+            Vector2 max = Vector2.Max(Vector2.Max(leftTop, rightTop),
+                                      Vector2.Max(leftBottom, rightBottom));
+
+            // Return that as a rectangle
+            return new Rectangle((int)min.X, (int)min.Y,
+                                 (int)(max.X - min.X), (int)(max.Y - min.Y));
         }
 
         public void manageShipHeading()
@@ -492,25 +553,26 @@ namespace Main
 
         public void ensureCameraWithinBoundaries (float xAmt, float yAmt)
         {
+            int shipCenterXAdjustment = 130;
             for (int i=0; i<2; i++)
             {
                 if (map.preciseAdjFact[i] <= 0) // onLeft
                 {
                     map.preciseAdjFact[i] = 0;
 
-                    if (centerRelScreen()[i] >= Game1.dim[i] / 2)
+                    if (centerRelScreen()[i] >= Game1.dim[i] / 2 + (i==0? shipCenterXAdjustment : 0))
                     {
-                        map.preciseAdjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2;
+                        map.preciseAdjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2 - (i == 0 ? shipCenterXAdjustment : 0);
                     }
                 }
                 else if (map.preciseAdjFact[i] >= map.maxAdjFact[i]) //onRight
                 {
                     map.preciseAdjFact[i] = map.maxAdjFact[i];
                     //Console.WriteLine("Scrolling");
-                    if (centerRelScreen()[i] <= Game1.dim[i] / 2)
+                    if (centerRelScreen()[i] <= Game1.dim[i] / 2 + (i == 0 ? shipCenterXAdjustment : 0))
                     {
                         
-                        map.preciseAdjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2;
+                        map.preciseAdjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2 - (i == 0 ? shipCenterXAdjustment : 0);
                     }
                 } else
                 {
@@ -534,8 +596,67 @@ namespace Main
         public void render ()
         {
             //sb.Draw(shipT[shipInd],new Rectangle(shipR.X -map.adjFact[0], shipR.Y -map.adjFact[1], shipR.Width, shipR.Height), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), SpriteEffects.None, 0);
-            sb.Draw(shipT[shipInd], new Vector2(shipR.X - map.adjFact[0], shipR.Y - map.adjFact[1]), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), Game1.viewingScale*shipScale, SpriteEffects.None, 0);
+            sb.Draw(shipT[shipInd], new Vector2(shipR.X - map.adjFact[0], shipR.Y - map.adjFact[1]), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), testing?Color.Red:Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), Game1.viewingScale*shipScale, SpriteEffects.None, 0);
+            int[] shipMapCent = centerOnMap();
+            Matrix shipMat = Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) * Matrix.CreateScale(shipScale) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            sb.Draw(tmT, CalculateBoundingRectangle(shipR, shipMat), Color.White);
+        }
 
+        /// <summary>
+        /// Determines if there is overlap of the non-transparent pixels between two
+        /// sprites.
+        /// </summary>
+        /// <param name="transformA">World transform of the first sprite.</param>
+        /// <param name="widthA">Width of the first sprite's texture.</param>
+        /// <param name="heightA">Height of the first sprite's texture.<;/param>
+        /// <param name="dataA">Pixel color data of the first sprite.</param>
+        /// <param name="transformB">World transform of the second sprite.</param>
+        /// <param name="widthB">Width of the second sprite's texture.</param>
+        /// <param name="heightB">Height of the second sprite's texture.</param>
+        /// <param name="dataB">Pixel color data of the second sprite.</param>
+        /// <returns>True if non-transparent pixels overlap; false otherwise</returns>
+        static bool IntersectPixels(
+            Matrix transformA, int widthA, int heightA, Color[] dataA,
+            Matrix transformB, int widthB, int heightB, Color[] dataB)
+        {
+            // Calculate a matrix which transforms from A's local space into
+            // world space and then into B's local space
+            Matrix transformAToB = transformA * Matrix.Invert(transformB);
+
+            // For each row of pixels in A
+            for (int yA = 0; yA < heightA; yA++)
+            {
+                // For each pixel in this row
+                for (int xA = 0; xA < widthA; xA++)
+                {
+                    // Calculate this pixel's location in B
+                    Vector2 positionInB =
+                        Vector2.Transform(new Vector2(xA, yA), transformAToB);
+
+                    // Round to the nearest pixel
+                    int xB = (int)Math.Round(positionInB.X);
+                    int yB = (int)Math.Round(positionInB.Y);
+
+                    // If the pixel lies within the bounds of B
+                    if (0 <= xB && xB < widthB &&
+                        0 <= yB && yB < heightB)
+                    {
+                        // Get the colors of the overlapping pixels
+                        Color colorA = dataA[xA + yA * widthA];
+                        Color colorB = dataB[xB + yB * widthB];
+
+                        // If both pixels are not completely transparent,
+                        if (colorA.A != 0 && colorB.A != 0)
+                        {
+                            // then an intersection has been found
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            // No intersection found
+            return false;
         }
     }
 }
