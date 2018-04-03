@@ -16,6 +16,7 @@ namespace Main
         public Rectangle isloc;
         public Texture2D islandT;
         public Color[] islandTextureData;
+        public Texture2D tmT = game.Content.Load<Texture2D>("testing_mask");
 
         public Island(Rectangle IL, Texture2D t)
         {
@@ -27,16 +28,17 @@ namespace Main
 
         public void render()
         {
-            if (Game1.viewingPort.Intersects(new Rectangle(isloc.X, isloc.Y, (int)(islandT.Width*Map.islandScale), (int)(islandT.Height*Map.islandScale))))
+            if (Game1.viewingPort.Intersects(isloc))
             {
-                sb.Draw(islandT, new Vector2(isloc.X - map.adjFact[0], isloc.Y - map.adjFact[1]), new Rectangle(0, 0, islandT.Width, islandT.Height), Color.White, 0, new Vector2(isloc.Width / 2, isloc.Height / 2), Game1.viewingScale * Map.islandScale, SpriteEffects.None, 0);
+                sb.Draw(islandT, new Vector2(isloc.X - map.adjFact[0], isloc.Y - map.adjFact[1]), new Rectangle(0, 0, islandT.Width, islandT.Height), Color.White, 0, new Vector2(0,0), Game1.viewingScale * Map.islandScale, SpriteEffects.None, 0);
+               // sb.Draw(tmT, new Rectangle(isloc.X-map.adjFact[0], isloc.Y - map.adjFact[1], (int)(isloc.Width*Game1.viewingScale), (int)(isloc.Height * Game1.viewingScale)), Color.White);
             }
             
         }
 
         public bool decide()
         {
-            if (Game1.viewingPort.Intersects(new Rectangle(isloc.X, isloc.Y, (int)(islandT.Width * Map.islandScale), (int)(islandT.Height * Map.islandScale))))
+            if (Game1.viewingPort.Intersects(isloc))
             {
                 return true;
             }

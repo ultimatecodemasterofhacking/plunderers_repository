@@ -25,8 +25,8 @@ namespace Main
         public int[] maxAdjFact;
         public float[] preciseAdjFact;
         public static float islandScale;
-        private int edgeIslandBuffer = 50;
-        private Island[] islands;
+        private int edgeIslandBuffer = 100;
+        public Island[] islands;
         public static List<Island> islandsToDraw = new List<Island>();
         public static List<Island> islandsToDrawTemp = new List<Island>();
 
@@ -75,7 +75,7 @@ namespace Main
                     maxAdjFact[0] = mapWidth - Game1.dim[0];
                     maxAdjFact[1] = mapHeight - Game1.dim[1];
                     //load island texts
-                    islandScale = .5f;
+                    islandScale = .5f; //------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~******should be .5f
                     islandTexts = new Texture2D[5];
                     for (int i=0; i<islandTexts.Length; i++)
                     {
@@ -88,12 +88,12 @@ namespace Main
                     for (int p=0; p<50; p++)
                     {
                         int textInd = rand.Next(islandTexts.Length);
-                        int tryX = rand.Next(edgeIslandBuffer, mapWidth - edgeIslandBuffer - (int)(islandTexts[textInd].Width * Math.Sqrt(islandScale)));
-                        int tryY = rand.Next(edgeIslandBuffer, mapHeight - edgeIslandBuffer - (int)(islandTexts[textInd].Height * Math.Sqrt(islandScale)));
+                        int tryX = rand.Next(edgeIslandBuffer, mapWidth - edgeIslandBuffer - (int)(islandTexts[textInd].Width * islandScale));
+                        int tryY = rand.Next(edgeIslandBuffer, mapHeight - edgeIslandBuffer - (int)(islandTexts[textInd].Height * islandScale));
                         
                         //test for collisions with other islands
                         bool collides = false;
-                        Rectangle potential = new Rectangle(tryX, tryY, (int)(islandTexts[textInd].Width * Math.Sqrt(islandScale)), (int)(islandTexts[textInd].Height*Math.Sqrt(islandScale)));
+                        Rectangle potential = new Rectangle(tryX, tryY, (int)(islandTexts[textInd].Width * islandScale), (int)(islandTexts[textInd].Height*islandScale));
                         for (int b=0; b<tempIslands.Count(); b++)
                         {
                             if (tempIslands[b].isloc.Intersects(potential))
@@ -142,7 +142,7 @@ namespace Main
             {
                 islandsToDraw[i].render();
             }
-            Console.WriteLine("Drew " + islandsToDraw.Count + " islands out of " + islands.Length);
+           // Console.WriteLine("Drew " + islandsToDraw.Count + " islands out of " + islands.Length);
         }
 
         

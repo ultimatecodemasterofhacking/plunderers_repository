@@ -49,7 +49,7 @@ namespace Main
 
             charForm = false;
             this.shipType = shipType;
-            shipScale = .20f;
+            shipScale = .2f; //########################################################should be .2
             charScale = .1f;
             targetDest[0] = -1;
             targetDest[1] = -1;
@@ -68,7 +68,7 @@ namespace Main
                 case 0:
                     shipInd = 0;
                     shipT = new Texture2D[1];
-                    shipT[0] = game.Content.Load<Texture2D>("ship1");
+                    shipT[0] = game.Content.Load<Texture2D>("shipTest");
                     shipR = new Rectangle(0, 0, (int)(shipT[0].Width * shipScale), (int)(shipT[0].Height * shipScale));
                     shipTextureData = new Color[shipT[shipInd].Width * shipT[shipInd].Height];
                     
@@ -138,24 +138,40 @@ namespace Main
         public void collisionCheckMapStuff ()
         {
             int[] shipMapCent = centerOnMap();
-            Matrix shipMat =  Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) * Matrix.CreateScale(shipScale) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
-            Rectangle shipBoundingRect = CalculateBoundingRectangle(shipR, shipMat);
+            //Matrix shipMat =  Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) * Matrix.CreateScale(shipScale) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            //Matrix shipMat = Matrix.CreateScale(shipScale) * Matrix.CreateTranslation(-shipT[shipInd].Width, -shipT[shipInd].Height, 0) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            //Matrix shipMat2 = Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) *  Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            Matrix shipMat = Matrix.CreateScale(shipScale) * Matrix.CreateTranslation(-shipT[shipInd].Width / 2 * shipScale, -shipT[shipInd].Height / 2 * shipScale, 0) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            Matrix shipMat2 = Matrix.CreateTranslation(-shipT[shipInd].Width, -shipT[shipInd].Height, 0) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            Rectangle shipBoundingRect = CalculateBoundingRectangle(new Rectangle(0, 0, shipT[shipInd].Width, shipT[shipInd].Height), shipMat);
             bool collision = false;
             for (int i=0; i<Map.islandsToDraw.Count; i++)
             {
-                if (shipBoundingRect.Intersects(Map.islandsToDraw[i].isloc))
+                int extension = 20;
+                Rectangle isloc = Map.islandsToDraw[i].isloc;
+                if (shipBoundingRect.Intersects(new Rectangle(isloc.X, isloc.Y, isloc.Width, isloc.Height)))
                 {
                     //time to do pixel perfect yeet
+                    
                     Island isleToCheck = Map.islandsToDraw[i];
                     Matrix islandMat = Matrix.CreateScale(Map.islandScale) * Matrix.CreateTranslation(isleToCheck.isloc.X, isleToCheck.isloc.Y, 0);
                     collision = IntersectPixels(shipMat, shipT[shipInd].Width, shipT[shipInd].Height, shipTextureData, islandMat, isleToCheck.islandT.Width, isleToCheck.islandT.Height, isleToCheck.islandTextureData);
                     if (collision)
                     {
                         Console.WriteLine("COLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        collision = true;
                         break;
                     }
+                    
+                    //collision = true;
+                   // break;
+                } else
+                {
+                    collision = false;
+                    //Console.WriteLine("nope");
                 }
             }
+            Console.WriteLine("Drew " + Map.islandsToDraw.Count);
             testing = collision;
 
 
@@ -594,12 +610,30 @@ namespace Main
 
 
         public void render ()
+
         {
             //sb.Draw(shipT[shipInd],new Rectangle(shipR.X -map.adjFact[0], shipR.Y -map.adjFact[1], shipR.Width, shipR.Height), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), SpriteEffects.None, 0);
-            sb.Draw(shipT[shipInd], new Vector2(shipR.X - map.adjFact[0], shipR.Y - map.adjFact[1]), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), testing?Color.Red:Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), Game1.viewingScale*shipScale, SpriteEffects.None, 0);
+            sb.Draw(shipT[shipInd], new Vector2((shipR.X - map.adjFact[0]), shipR.Y - map.adjFact[1]), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), testing?Color.Red:Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), Game1.viewingScale*shipScale, SpriteEffects.None, 0);
             int[] shipMapCent = centerOnMap();
-            Matrix shipMat = Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) * Matrix.CreateScale(shipScale) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
-            sb.Draw(tmT, CalculateBoundingRectangle(shipR, shipMat), Color.White);
+            // Matrix shipMat = Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) * Matrix.CreateScale(shipScale) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            Matrix shipMat = Matrix.CreateScale(shipScale) * Matrix.CreateTranslation(-shipT[shipInd].Width/2*shipScale, -shipT[shipInd].Height/2*shipScale, 0) *  Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            Rectangle toMod = CalculateBoundingRectangle(new Rectangle(0, 0, shipT[shipInd].Width, shipT[shipInd].Height), shipMat);
+            toMod.X -= map.adjFact[0];
+            toMod.Y -= map.adjFact[1];
+            //center on origin
+            sb.Draw(tmT, toMod, Color.White);
+            Console.WriteLine(shipR.X + " " + shipR.Y + " for ship");
+            // Console.WriteLine()
+
+            /*
+            for (int i = 0; i < Map.islandsToDraw.Count; i++)
+            {
+                int extension = 20;
+                Rectangle isloc = Map.islandsToDraw[i].isloc;
+                sb.Draw(tmT, new Rectangle(isloc.X - map.adjFact[0], isloc.Y - map.adjFact[1], isloc.Width, isloc.Height), Color.White);
+            }
+            */
+                
         }
 
         /// <summary>
@@ -624,10 +658,10 @@ namespace Main
             Matrix transformAToB = transformA * Matrix.Invert(transformB);
 
             // For each row of pixels in A
-            for (int yA = 0; yA < heightA; yA++)
+            for (int yA = 0; yA < heightA; yA+=3)
             {
                 // For each pixel in this row
-                for (int xA = 0; xA < widthA; xA++)
+                for (int xA = 0; xA < widthA; xA+=3)
                 {
                     // Calculate this pixel's location in B
                     Vector2 positionInB =
