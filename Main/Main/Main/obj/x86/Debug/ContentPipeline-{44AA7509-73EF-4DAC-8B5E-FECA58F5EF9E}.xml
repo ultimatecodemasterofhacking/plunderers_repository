@@ -109,6 +109,15 @@
       <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\shipTest.xnb</Output>
       <Time>2018-04-03T16:05:23.5909674-05:00</Time>
     </Item>
+    <Item>
+      <Source>shiptestcropped.png</Source>
+      <Name>shiptestcropped</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\shiptestcropped.xnb</Output>
+      <Time>2018-04-03T16:19:45.5496929-05:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{44AA7509-73EF-4DAC-8B5E-FECA58F5EF9E}</ContentProjectGUID>

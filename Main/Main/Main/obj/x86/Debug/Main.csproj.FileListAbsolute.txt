@@ -47,3 +47,4 @@ C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Ma
 C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\island5.xnb
 C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\testing_mask.xnb
 C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\shipTest.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\shiptestcropped.xnb

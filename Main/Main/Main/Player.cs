@@ -68,7 +68,7 @@ namespace Main
                 case 0:
                     shipInd = 0;
                     shipT = new Texture2D[1];
-                    shipT[0] = game.Content.Load<Texture2D>("shipTest");
+                    shipT[0] = game.Content.Load<Texture2D>("ship1");
                     shipR = new Rectangle(0, 0, (int)(shipT[0].Width * shipScale), (int)(shipT[0].Height * shipScale));
                     shipTextureData = new Color[shipT[shipInd].Width * shipT[shipInd].Height];
                     
@@ -661,7 +661,7 @@ namespace Main
             for (int yA = 0; yA < heightA; yA+=3)
             {
                 // For each pixel in this row
-                for (int xA = 0; xA < widthA; xA+=3)
+                for (int xA = 0; xA < widthA; xA+=4)
                 {
                     // Calculate this pixel's location in B
                     Vector2 positionInB =
