@@ -112,7 +112,7 @@ namespace Main
                 }
             }
             
-            play.move();
+            play.move_collisioncheck();
             //update viewing port in case player moved
             Game1.viewingPort = new Rectangle(map.adjFact[0], map.adjFact[1], (int)(Game1.dim[0] * 1.0 /Game1.viewingScale) + 300, (int)(Game1.dim[1] * 1.0 /Game1.viewingScale) + 300);
             //Console.WriteLine(play.shipSpeed);

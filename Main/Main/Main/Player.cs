@@ -314,7 +314,7 @@ namespace Main
             return amts;
         }
 
-        public void move ()
+        public void move_collisioncheck ()
         {
            // Console.WriteLine("TD= " + targetDest[0] + " " + targetDest[1]);
            // Console.WriteLine("Decell = " + decellMode);
