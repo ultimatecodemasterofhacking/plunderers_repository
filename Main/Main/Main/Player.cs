@@ -43,6 +43,9 @@ namespace Main
         //testing variables
         private bool testing = false;
         private Texture2D tmT;
+        private float stillMargin = .5f;
+        private bool hitIsland = false;
+        private int hitIslandTimer = 0;
 
         public Player (int shipType, int pNum)
         {
@@ -68,7 +71,7 @@ namespace Main
                 case 0:
                     shipInd = 0;
                     shipT = new Texture2D[1];
-                    shipT[0] = game.Content.Load<Texture2D>("ship1");
+                    shipT[0] = game.Content.Load<Texture2D>("shiptestcropped");
                     shipR = new Rectangle(0, 0, (int)(shipT[0].Width * shipScale), (int)(shipT[0].Height * shipScale));
                     shipTextureData = new Color[shipT[shipInd].Width * shipT[shipInd].Height];
                     
@@ -116,13 +119,21 @@ namespace Main
                 {
                     shipSpeed = maxShipSpeed;
                 }
+
+                Console.WriteLine("acc");
                 
             } else
             {
                 //Console.WriteLine("hapnin");
-
-                shipSpeed += shipDeccel;
-                if (shipSpeed < 0)
+                if (shipSpeed>=0)
+                {
+                    shipSpeed += shipDeccel;
+                } else
+                {
+                    shipSpeed -= shipDeccel;
+                }
+                
+                if (shipSpeed < 0+stillMargin && shipSpeed>0-stillMargin)
                 {
                     shipSpeed = 0;
                     decellMode = false;
@@ -203,8 +214,9 @@ namespace Main
                                  (int)(max.X - min.X), (int)(max.Y - min.Y));
         }
 
-        public void manageShipHeading()
+        public float manageShipHeading()
         {
+            float radTurned = 0;
             if (shipSpeed != 0)
             {
                 //Console.WriteLine("ship goal heading " + shipGoalHeading);
@@ -240,10 +252,12 @@ namespace Main
                         if (clockwise)
                         {
                             shipHeadingRad -= shipTurnSpeed;
+                            radTurned = -maxShipTurnSpeed;
                         }
                         else
                         {
                             shipHeadingRad += shipTurnSpeed;
+                            radTurned = maxShipTurnSpeed;
                         }
                     }
                     else
@@ -258,6 +272,7 @@ namespace Main
                 }
                 //testing shipHeadingRad = (float)(Math.PI / 3);
             }
+            return radTurned;
         }
 
         public float[] distroShipSpeed ()
@@ -316,18 +331,29 @@ namespace Main
 
         public void move_collisioncheck ()
         {
-           // Console.WriteLine("TD= " + targetDest[0] + " " + targetDest[1]);
-           // Console.WriteLine("Decell = " + decellMode);
-           // Console.WriteLine("Speed = " + shipSpeed);
-
-            if (targetDest[0] >=0 || targetDest[1] >=0)
+            // Console.WriteLine("TD= " + targetDest[0] + " " + targetDest[1]);
+            // Console.WriteLine("Decell = " + decellMode);
+            // Console.WriteLine("Speed = " + shipSpeed);
+            if (hitIsland)
             {
-               // Console.WriteLine("MOVING");
+                hitIslandTimer++;
+            }
+            float xMoved = 0;
+            float yMoved = 0;
+            float radTurned = 0;
+            if (hitIsland)
+            {
+                targetDest[0] = -1;
+                targetDest[1] = -1;
+            }
+            if (targetDest[0] >= 0 || targetDest[1] >= 0)
+            {
+                 Console.WriteLine("MOVING TO DEST");
 
                 if (!charForm)
                 {
-                    
-                    manageShipHeading();
+
+                    radTurned = manageShipHeading();
                     manageShipSpeed();
                     float[] amts = distroShipSpeed();
                     float xAmt = amts[0];
@@ -373,7 +399,7 @@ namespace Main
                     float tempShipRY = shipY;
                     tempShipRX += xAmt;
                     tempShipRY += yAmt;
-                    
+
                     //ensure move is within boundaries
                     if (tempShipRX < 0)
                     {
@@ -405,6 +431,8 @@ namespace Main
                     }
                     //determine adjustment factor for rendering
                     //Console.WriteLine("real amounts of movement: " + xAmt + " " + yAmt);
+                    xMoved = tempShipRX - shipX;
+                    yMoved = tempShipRY - shipY;
                     shipR.X = (int)tempShipRX;
                     shipR.Y = (int)tempShipRY;
                     shipX = tempShipRX;
@@ -413,7 +441,7 @@ namespace Main
                     //map.adjFact[0] += (int)xAmt;
                     //map.adjFact[1] += (int)yAmt;
                     ensureCameraWithinBoundaries(xAmt, yAmt);
-                    if (pCent[0] < targetDest[0]+moveErrorMargin && pCent[0]> targetDest[0] - moveErrorMargin && pCent[1] < targetDest[1] + moveErrorMargin && pCent[1] > targetDest[1] - moveErrorMargin)
+                    if (pCent[0] < targetDest[0] + moveErrorMargin && pCent[0] > targetDest[0] - moveErrorMargin && pCent[1] < targetDest[1] + moveErrorMargin && pCent[1] > targetDest[1] - moveErrorMargin)
                     {
                         if (!decellMode)
                         {
@@ -421,30 +449,172 @@ namespace Main
                             //set new target
                             int displacement = (int)((-1 * shipSpeed * shipSpeed) / (2 * shipDeccel));
                             //Console.WriteLine("DISPLACEMENT - " + displacement);
-                            float n = displacement/shipSpeed;
+                            float n = displacement / shipSpeed;
                             int moreXAmt = (int)(n * xAmt);
                             int moreYAmt = (int)(n * yAmt);
                             targetDest[0] += moreXAmt;
                             targetDest[1] += moreYAmt;
-                        } else
-                        {
-                            decellMode = false;
-                            targetDest[0] = -1;
-                            targetDest[1] = -1;
                         }
-                        
+                        else
+                        {
+                            if (!hitIsland)
+                            {
+                                decellMode = false;
+                                targetDest[0] = -1;
+                                targetDest[1] = -1;
+                            }
+                            
+                        }
+
                         //set new targetdest
                         //Console.WriteLine("---We're there!");
-                        
+
                     }
 
                 }
 
+            }
+            else
+            {
+
+                //no target dest, still must move with existing speeds
+                if (!charForm)
+                {
+
+                    manageShipSpeed();
+                    float[] amts = distroShipSpeed();
+                    float xAmt = amts[0];
+                    float yAmt = amts[1];
+                    int[] pCent = centerOnMap();
+
+
+
+                    float tempShipRX = shipX;
+                    float tempShipRY = shipY;
+                    tempShipRX += xAmt;
+                    tempShipRY += yAmt;
+
+                    //ensure move is within boundaries
+                    if (tempShipRX < 0)
+                    {
+                        xAmt = -tempShipRX;
+                        tempShipRX = 0;
+                        tempShipRY = shipR.Y;
+                        yAmt = 0;
+                    }
+                    if (tempShipRY < 0)
+                    {
+                        yAmt = -tempShipRY;
+                        tempShipRY = 0;
+                        tempShipRX = shipR.X;
+                        xAmt = 0;
+                    }
+                    if (tempShipRX + shipR.Width >= map.mapWidth)
+                    {
+                        xAmt = map.mapWidth - shipR.Width - (tempShipRX);
+                        tempShipRX = map.mapWidth - shipR.Width;
+                        tempShipRY = shipR.Y;
+                        yAmt = 0;
+                    }
+                    if (tempShipRY + shipR.Height >= map.mapHeight)
+                    {
+                        yAmt = map.mapHeight - shipR.Height - (tempShipRY);
+                        tempShipRY = map.mapHeight - shipR.Height;
+                        tempShipRX = shipR.X;
+                        xAmt = 0;
+                    }
+                    //determine adjustment factor for rendering
+                    //Console.WriteLine("real amounts of movement: " + xAmt + " " + yAmt);
+                    xMoved = tempShipRX - shipX;
+                    yMoved = tempShipRY - shipY;
+                    shipR.X = (int)tempShipRX;
+                    shipR.Y = (int)tempShipRY;
+                    shipX = tempShipRX;
+                    shipY = tempShipRY;
+
+                    //map.adjFact[0] += (int)xAmt;
+                    //map.adjFact[1] += (int)yAmt;
+                    ensureCameraWithinBoundaries(xAmt, yAmt);
+                }
+            }
+
+            int[] shipMapCent = centerOnMap();
+            //Matrix shipMat =  Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) * Matrix.CreateScale(shipScale) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            //Matrix shipMat = Matrix.CreateScale(shipScale) * Matrix.CreateTranslation(-shipT[shipInd].Width, -shipT[shipInd].Height, 0) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            //Matrix shipMat2 = Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) *  Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            Matrix shipMat = Matrix.CreateScale(shipScale) * Matrix.CreateTranslation(-shipT[shipInd].Width / 2 * shipScale, -shipT[shipInd].Height / 2 * shipScale, 0) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            Matrix shipMat2 = Matrix.CreateTranslation(-shipT[shipInd].Width, -shipT[shipInd].Height, 0) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+            Rectangle shipBoundingRect = CalculateBoundingRectangle(new Rectangle(0, 0, shipT[shipInd].Width, shipT[shipInd].Height), shipMat);
+            bool collision = false;
+            for (int i = 0; i < Map.islandsToDraw.Count; i++)
+            {
+                int extension = 20;
+                Rectangle isloc = Map.islandsToDraw[i].isloc;
+                if (shipBoundingRect.Intersects(new Rectangle(isloc.X, isloc.Y, isloc.Width, isloc.Height)))
+                {
+                    //time to do pixel perfect yeet
+
+                    Island isleToCheck = Map.islandsToDraw[i];
+                    Matrix islandMat = Matrix.CreateScale(Map.islandScale) * Matrix.CreateTranslation(isleToCheck.isloc.X, isleToCheck.isloc.Y, 0);
+                    collision = IntersectPixels(shipMat, shipT[shipInd].Width, shipT[shipInd].Height, shipTextureData, islandMat, isleToCheck.islandT.Width, isleToCheck.islandT.Height, isleToCheck.islandTextureData);
+                    if (collision)
+                    {
+                        Console.WriteLine("COLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        collision = true;
+                        break;
+                    }
+
+                    //collision = true;
+                    // break;
+                }
+                else
+                {
+                    collision = false;
+                    //Console.WriteLine("nope");
+                }
+            }
+           // Console.WriteLine("Drew " + Map.islandsToDraw.Count);
+            testing = collision;
+            if (collision) //with an island
+            {
+                hitIsland = true;
+                hitIslandTimer = 0;
+                shipX -= changeMagn(xMoved, 3);
+                shipY -= changeMagn(yMoved, 3);
+                shipR.X = (int)shipX;
+                shipR.Y = (int)shipY;
+                shipHeadingRad -= radTurned;
+                //shipGoalHeading = shipHeadingRad - radTurned;
+                ensureCameraWithinBoundaries(-changeMagn(xMoved, 3), -changeMagn(yMoved, 3));
+                shipSpeed = -shipSpeed/2-3;
+                targetDest[0] = -1;
+                targetDest[1] = -1;
+                decellMode = true;
             } else
             {
-                
-                //Console.WriteLine("Not moving");
+                if (hitIslandTimer > 15)
+                {
+                    hitIsland = false;
+                }
             }
+
+            Console.WriteLine(shipSpeed + " speeds");
+        }
+
+        public float changeMagn (float num, float inc)
+        {
+
+            float magn = Math.Abs(num);
+            if (inc<0 && inc>magn)
+            {
+                throw new System.ArgumentException("Can't decrease magn to less than zero", "original");
+            }
+            magn += inc;
+            if (num<0)
+            {
+                magn = -magn;
+            }
+            return magn;
         }
 
         public void normalizeShipHeading ()
@@ -467,103 +637,107 @@ namespace Main
 
         public void setTarget(int mX, int mY)
         {
-            potDest[0] = mX + map.adjFact[0];
-
-            potDest[1] = mY + map.adjFact[1];
-            int[] pCent = centerOnMap();
-            decellMode = false;
-            if (shipSpeed<1)
+            if (!hitIsland)
             {
-                shipSpeed = 3;
-            }
-            
+                potDest[0] = mX + map.adjFact[0];
 
-            if (!charForm)
-            {
-                if (potDest[0] > map.mapWidth - shipR.Width/2)
+                potDest[1] = mY + map.adjFact[1];
+                int[] pCent = centerOnMap();
+                decellMode = false;
+                if (shipSpeed < 1)
                 {
-                    potDest[0] = map.mapWidth - shipR.Width / 2;
+                    shipSpeed += 3;
                 }
 
-                if (potDest[1] > map.mapHeight - shipR.Height / 2)
+
+                if (!charForm)
                 {
-                    potDest[1] = map.mapHeight - shipR.Height / 2;
+                    if (potDest[0] > map.mapWidth - shipR.Width / 2)
+                    {
+                        potDest[0] = map.mapWidth - shipR.Width / 2;
+                    }
+
+                    if (potDest[1] > map.mapHeight - shipR.Height / 2)
+                    {
+                        potDest[1] = map.mapHeight - shipR.Height / 2;
+                    }
+
+                    if (potDest[0] < shipR.Width / 2)
+                    {
+                        potDest[0] = shipR.Width / 2;
+                    }
+
+                    if (potDest[1] < shipR.Height / 2)
+                    {
+                        potDest[1] = shipR.Height / 2;
+                    }
+
+                    if (pCent[0] < potDest[0] + moveErrorMargin && pCent[0] > potDest[0] - moveErrorMargin && pCent[1] < potDest[1] + moveErrorMargin && pCent[1] > potDest[1] - moveErrorMargin)
+                    {
+                        potDest[0] = -1;
+                        potDest[1] = -1;
+
+                    }
+
+                    Rectangle moose = new Rectangle(mX, mY, 1, 1);
+                    Rectangle tempShipCenter = new Rectangle(centerRelScreen()[0] - fromShipCenterVariation[0], centerRelScreen()[1] - fromShipCenterVariation[1], fromShipCenterVariation[0] * 2, fromShipCenterVariation[1] * 2);
+                    if (moose.Intersects(tempShipCenter))
+                    {
+                        potDest[0] = -1;
+                        potDest[1] = -1;
+                    }
                 }
+                targetDest[0] = potDest[0];
+                targetDest[1] = potDest[1];
 
-                if (potDest[0]<shipR.Width/2)
+                normalizeShipHeading();
+
+                //pCent[0] += shipR.Width / 2; 
+                float goalHeading = 0;
+                /*
+                if (targetDest[0] > pCent[0])
                 {
-                    potDest[0] = shipR.Width / 2;
+                    goalHeading =(float)( Math.Atan((targetDest[1] - pCent[1]) * 1.0 / (targetDest[0]-pCent[0])));
+                } else
+                {
+                    goalHeading = (float)((Math.Atan((targetDest[1] - pCent[1]) * 1.0 / (targetDest[0] - pCent[0]))));
                 }
+                */
+                goalHeading = (float)(Math.Atan(Math.Abs((targetDest[1] - pCent[1])) * 1.0 / Math.Abs(targetDest[0] - pCent[0])));
 
-                if (potDest[1] < shipR.Height / 2)
+                if (goalHeading > Math.PI / 2 || goalHeading < 0)
                 {
-                    potDest[1] = shipR.Height / 2;
+                    Console.WriteLine("PROBLEM GOAL: " + goalHeading);
                 }
-
-                if (pCent[0] < potDest[0] + moveErrorMargin && pCent[0] > potDest[0] - moveErrorMargin && pCent[1] < potDest[1] + moveErrorMargin && pCent[1] > potDest[1] - moveErrorMargin)
+                if (targetDest[0] > pCent[0])
                 {
-                    potDest[0] = -1;
-                    potDest[1] = -1;
-
-                }
-
-                Rectangle moose = new Rectangle(mX, mY, 1, 1);
-                Rectangle tempShipCenter = new Rectangle(centerRelScreen()[0]-fromShipCenterVariation[0], centerRelScreen()[1]-fromShipCenterVariation[1], fromShipCenterVariation[0]*2, fromShipCenterVariation[1]*2);
-                if (moose.Intersects(tempShipCenter))
-                {
-                    potDest[0] = -1;
-                    potDest[1] = -1;
-                }
-            }
-            targetDest[0] = potDest[0];
-            targetDest[1] = potDest[1];
-
-            normalizeShipHeading();
-            
-            //pCent[0] += shipR.Width / 2; 
-            float goalHeading = 0;
-            /*
-            if (targetDest[0] > pCent[0])
-            {
-                goalHeading =(float)( Math.Atan((targetDest[1] - pCent[1]) * 1.0 / (targetDest[0]-pCent[0])));
-            } else
-            {
-                goalHeading = (float)((Math.Atan((targetDest[1] - pCent[1]) * 1.0 / (targetDest[0] - pCent[0]))));
-            }
-            */
-            goalHeading = (float)(Math.Atan(Math.Abs((targetDest[1] - pCent[1])) * 1.0 / Math.Abs(targetDest[0] - pCent[0])));
-
-            if (goalHeading > Math.PI / 2 || goalHeading < 0)
-            {
-                Console.WriteLine("PROBLEM GOAL: " + goalHeading);
-            }
-            if (targetDest[0] > pCent[0])
-            {
-                if (targetDest[1] < pCent[1])
-                {
-                    //do nothing
-                    // Console.WriteLine("Case 1");
+                    if (targetDest[1] < pCent[1])
+                    {
+                        //do nothing
+                        // Console.WriteLine("Case 1");
+                    }
+                    else
+                    {
+                        goalHeading = (float)(Math.PI * 2 - goalHeading);
+                        // Console.WriteLine("Case 2");
+                    }
                 }
                 else
                 {
-                    goalHeading = (float)(Math.PI * 2 - goalHeading);
-                    // Console.WriteLine("Case 2");
+                    if (targetDest[1] < pCent[1])
+                    {
+                        goalHeading = (float)(Math.PI - goalHeading);
+                        //Console.WriteLine("Case 3");
+                    }
+                    else
+                    {
+                        goalHeading = (float)(Math.PI + goalHeading);
+                        //Console.WriteLine("Case 4");
+                    }
                 }
+                shipGoalHeading = goalHeading;
+
             }
-            else
-            {
-                if (targetDest[1] < pCent[1])
-                {
-                    goalHeading = (float)(Math.PI - goalHeading);
-                    //Console.WriteLine("Case 3");
-                }
-                else
-                {
-                    goalHeading = (float)(Math.PI + goalHeading);
-                    //Console.WriteLine("Case 4");
-                }
-            }
-            shipGoalHeading = goalHeading;
 
         }
 
@@ -622,7 +796,7 @@ namespace Main
             toMod.Y -= map.adjFact[1];
             //center on origin
             sb.Draw(tmT, toMod, Color.White);
-            Console.WriteLine(shipR.X + " " + shipR.Y + " for ship");
+            //Console.WriteLine(shipR.X + " " + shipR.Y + " for ship");
             // Console.WriteLine()
 
             /*

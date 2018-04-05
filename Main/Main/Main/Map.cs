@@ -29,6 +29,7 @@ namespace Main
         public Island[] islands;
         public static List<Island> islandsToDraw = new List<Island>();
         public static List<Island> islandsToDrawTemp = new List<Island>();
+        //public static float bufferSpace = 100;
 
 
         public Map(int type, int seed)
@@ -83,8 +84,15 @@ namespace Main
                     }
                     //put islands on map
                     List<Island> tempIslands = new List<Island>();
+                    List<Rectangle> tempCollCheckIsles = new List<Rectangle>();
                     //Console.WriteLine(mapWidth + " is mapwidth");
                     //Console.WriteLine(mapHeight + " is mapHeight");
+                    Rectangle[] playStartLocs = new Rectangle[4];
+                    playStartLocs[0] = new Rectangle(Game1.dim[0] / 2 - 100, Game1.dim[1] / 2 - 100, 200, 200);
+                    playStartLocs[1] = new Rectangle(Game1.dim[0] / 2 - 100, Game1.dim[1] / 2 + 100, 200, 200);
+                    playStartLocs[2] = new Rectangle(Game1.dim[0] / 2 + 100, Game1.dim[1] / 2 - 100, 200, 200);
+                    playStartLocs[3] = new Rectangle(Game1.dim[0] / 2 + 100, Game1.dim[1] / 2 + 100, 200, 200);
+
                     for (int p=0; p<50; p++)
                     {
                         int textInd = rand.Next(islandTexts.Length);
@@ -96,7 +104,15 @@ namespace Main
                         Rectangle potential = new Rectangle(tryX, tryY, (int)(islandTexts[textInd].Width * islandScale), (int)(islandTexts[textInd].Height*islandScale));
                         for (int b=0; b<tempIslands.Count(); b++)
                         {
-                            if (tempIslands[b].isloc.Intersects(potential))
+                            if (tempCollCheckIsles[b].Intersects(potential))
+                            {
+                                collides = true;
+                                break;
+                            }
+                        }
+                        for (int b = 0; b < playStartLocs.Length; b++)
+                        {
+                            if (playStartLocs[b].Intersects(potential))
                             {
                                 collides = true;
                                 break;
@@ -107,6 +123,7 @@ namespace Main
                             //Console.WriteLine("xWorkd " + tryX);
                             //Console.WriteLine("yWorkd " + tryY);
                             tempIslands.Add(new Main.Island(potential, islandTexts[textInd]));
+                            tempCollCheckIsles.Add(new Rectangle(potential.X-edgeIslandBuffer, potential.Y-edgeIslandBuffer, potential.Width+edgeIslandBuffer*2, potential.Height+edgeIslandBuffer*2));
                         }
                     }
                     islands = new Island[tempIslands.Count()];
