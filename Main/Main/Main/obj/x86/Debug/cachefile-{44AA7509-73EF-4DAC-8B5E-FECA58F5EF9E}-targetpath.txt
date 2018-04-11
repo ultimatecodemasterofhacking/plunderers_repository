@@ -11,3 +11,12 @@ Content\island5.xnb
 Content\testing_mask.xnb
 Content\shipTest.xnb
 Content\shiptestcropped.xnb
+Content\crab.xnb
+Content\DockButtonHighlighted.xnb
+Content\DockButtonPressed.xnb
+Content\DockButtonUnpressed.xnb
+Content\palmtree.xnb
+Content\treasurechest1.xnb
+Content\treasurechest2.xnb
+Content\treasurechest3.xnb
+Content\treasurechest4.xnb

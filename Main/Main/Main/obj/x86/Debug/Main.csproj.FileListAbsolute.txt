@@ -48,3 +48,12 @@ C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Ma
 C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\testing_mask.xnb
 C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\shipTest.xnb
 C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\shiptestcropped.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\crab.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\DockButtonHighlighted.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\DockButtonPressed.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\DockButtonUnpressed.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\palmtree.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\treasurechest1.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\treasurechest2.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\treasurechest3.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\treasurechest4.xnb

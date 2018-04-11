@@ -13,7 +13,7 @@ namespace Main
 {
     class Map : Drawable
     {
-        private Random rand;
+        private static Random rand;
         private int type;
         private Texture2D[,] waterT;
         private Rectangle[,] waterR;
@@ -37,12 +37,14 @@ namespace Main
             islandsToDraw = new List<Island>();
             islandsToDrawTemp = new List<Island>();
             rand = new Random(seed);
+            Island.rand = rand;
             this.type = type;
             adjFact = new int[2]; //for rendering the map centered on player
             preciseAdjFact = new float[2];
             maxAdjFact = new int[2];
             //generate random map
             Texture2D[] islandTexts;
+            Decoration.loadDecTexts();
             switch (type)
             {
                 case 0:
@@ -124,6 +126,7 @@ namespace Main
                             //Console.WriteLine("yWorkd " + tryY);
                             tempIslands.Add(new Main.Island(potential, islandTexts[textInd]));
                             tempCollCheckIsles.Add(new Rectangle(potential.X-edgeIslandBuffer, potential.Y-edgeIslandBuffer, potential.Width+edgeIslandBuffer*2, potential.Height+edgeIslandBuffer*2));
+                            
                         }
                     }
                     islands = new Island[tempIslands.Count()];
