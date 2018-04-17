@@ -98,3 +98,6 @@ C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\obj
 C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\pebbles.xnb
 C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\shell.xnb
 C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\smallplant.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\pebbles.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\shell.xnb
+C:\Users\122765\Desktop\plunderers_repository\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\smallplant.xnb
