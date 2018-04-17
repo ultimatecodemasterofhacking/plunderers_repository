@@ -586,7 +586,7 @@ namespace Main
                 shipHeadingRad -= radTurned;
                 //shipGoalHeading = shipHeadingRad - radTurned;
                 ensureCameraWithinBoundaries(-changeMagn(xMoved, 3), -changeMagn(yMoved, 3));
-                shipSpeed = -shipSpeed/2-3;
+                shipSpeed = -shipSpeed/3-2;
                 targetDest[0] = -1;
                 targetDest[1] = -1;
                 decellMode = true;

@@ -20,3 +20,6 @@ Content\treasurechest1.xnb
 Content\treasurechest2.xnb
 Content\treasurechest3.xnb
 Content\treasurechest4.xnb
+Content\pebbles.xnb
+Content\shell.xnb
+Content\smallplant.xnb

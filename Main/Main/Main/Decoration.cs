@@ -19,15 +19,27 @@ namespace Main
         private int itemIndex = 0;
         private float decRot = 0;
         private Color myColor;
+        private static HashSet<int> randomColorInd;
 
         public static void loadDecTexts ()
         {
-            decTexts = new Texture2D[2];
-            decScales = new float[2];
+            randomColorInd = new HashSet<int>();
+            randomColorInd.Add(1);
+            randomColorInd.Add(2);
+            randomColorInd.Add(4);
+            decTexts = new Texture2D[5];
+            decScales = new float[5];
             decTexts[0] = game.Content.Load<Texture2D>("palmtree");
             decScales[0] = .3f;
             decTexts[1] = game.Content.Load<Texture2D>("crab");
-            decScales[1] = .2f;
+            decScales[1] = .17f;
+            decTexts[2] = game.Content.Load<Texture2D>("pebbles");
+            decScales[2] = .2f;
+            decTexts[3] = game.Content.Load<Texture2D>("smallplant");
+            decScales[3] = .37f;
+            decTexts[4] = game.Content.Load<Texture2D>("shell");
+            decScales[4] = .16f;
+            
         }
 
         public Decoration (Rectangle rect, int ind)
@@ -35,7 +47,7 @@ namespace Main
             decRect = rect;
             itemIndex = ind;
             decRot = (float)(Island.rand.NextDouble() * Math.PI * 2);
-            if (itemIndex == 1)
+            if (randomColorInd.Contains(itemIndex))
             {
                 myColor = new Color(Island.rand.Next(1, 255), Island.rand.Next(1, 255), Island.rand.Next(1, 255));
             } else

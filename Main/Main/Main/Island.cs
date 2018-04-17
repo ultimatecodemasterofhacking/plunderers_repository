@@ -18,9 +18,9 @@ namespace Main
         public Color[] islandTextureData;
         public Texture2D tmT = game.Content.Load<Texture2D>("testing_mask");
         public Decoration[] decs;
-        private int decEdgeBuffer = 60;
+        private int decEdgeBuffer = 75;
         public static Random rand;
-        private int interItemBuffer = 20;
+        private int interItemBuffer = 10;
 
         public Island(Rectangle IL, Texture2D t)
         {
@@ -68,7 +68,7 @@ namespace Main
                     //Console.WriteLine("xWorkd " + tryX);
                     //Console.WriteLine("yWorkd " + tryY);
                     tempDecs.Add(new Decoration(potential, itemInd));
-                    tempCollCheckDecs.Add(new Rectangle(potential.X - interItemBuffer, potential.Y - interItemBuffer, potential.Width + interItemBuffer * 2, potential.Height + interItemBuffer * 2));
+                    tempCollCheckDecs.Add(new Rectangle(potential.X - interItemBuffer - potential.Width/2, potential.Y - interItemBuffer - potential.Height / 2, potential.Width + interItemBuffer * 2, potential.Height + interItemBuffer * 2));
 
                 }
             }
