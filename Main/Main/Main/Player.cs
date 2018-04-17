@@ -795,7 +795,7 @@ namespace Main
             toMod.X -= map.adjFact[0];
             toMod.Y -= map.adjFact[1];
             //center on origin
-            sb.Draw(tmT, toMod, Color.White);
+           // sb.Draw(tmT, toMod, Color.White);       //the testing gray bounding rect!!!
             //Console.WriteLine(shipR.X + " " + shipR.Y + " for ship");
             // Console.WriteLine()
 

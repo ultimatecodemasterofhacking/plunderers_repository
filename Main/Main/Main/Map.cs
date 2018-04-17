@@ -45,6 +45,7 @@ namespace Main
             //generate random map
             Texture2D[] islandTexts;
             Decoration.loadDecTexts();
+            Button.loadButtTexts();
             switch (type)
             {
                 case 0:

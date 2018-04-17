@@ -100,7 +100,7 @@ namespace Main
                     if (ms.X >= 0 && ms.X <= dim[0] && ms.Y >= 0 && ms.Y <= dim[1])
                     {
                         play.setTarget(ms.X, ms.Y);
-                        
+                        Button.mouseInteract(ms);
                     }
                     
                 }
