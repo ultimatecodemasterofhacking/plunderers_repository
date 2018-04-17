@@ -42,7 +42,7 @@ namespace Main
             List<Rectangle> tempCollCheckDecs = new List<Rectangle>();
 
 
-            for (int p = 0; p < 15; p++)
+            for (int p = 0; p < 25; p++)
             {
                 int itemInd = rand.Next(decTexts.Length);
                 Console.WriteLine("this itemInd is " + itemInd);

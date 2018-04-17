@@ -226,6 +226,15 @@
       <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\smallplant.xnb</Output>
       <Time>2018-04-16T20:46:49.9374279-05:00</Time>
     </Item>
+    <Item>
+      <Source>palmtree2.png</Source>
+      <Name>palmtree2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\EmilyPeterson\Documents\GitHub\plunderers_repository\Main\Main\Main\bin\x86\Debug\Content\palmtree2.xnb</Output>
+      <Time>2018-04-17T15:10:56.9641677-05:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{44AA7509-73EF-4DAC-8B5E-FECA58F5EF9E}</ContentProjectGUID>

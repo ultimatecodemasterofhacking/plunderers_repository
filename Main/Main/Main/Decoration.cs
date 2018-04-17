@@ -27,8 +27,8 @@ namespace Main
             randomColorInd.Add(1);
             randomColorInd.Add(2);
             randomColorInd.Add(4);
-            decTexts = new Texture2D[5];
-            decScales = new float[5];
+            decTexts = new Texture2D[7];
+            decScales = new float[7];
             decTexts[0] = game.Content.Load<Texture2D>("palmtree");
             decScales[0] = .3f;
             decTexts[1] = game.Content.Load<Texture2D>("crab");
@@ -39,7 +39,11 @@ namespace Main
             decScales[3] = .37f;
             decTexts[4] = game.Content.Load<Texture2D>("shell");
             decScales[4] = .16f;
-            
+            decTexts[5] = game.Content.Load<Texture2D>("palmtree2");
+            decScales[5] = .2f;
+            decTexts[6] = game.Content.Load<Texture2D>("palmtree"); //makes palm tree more likely
+            decScales[6] = .3f;
+
         }
 
         public Decoration (Rectangle rect, int ind)
