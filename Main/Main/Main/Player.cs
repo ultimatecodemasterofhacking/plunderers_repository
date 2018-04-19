@@ -46,6 +46,7 @@ namespace Main
         private float stillMargin = .5f;
         private bool hitIsland = false;
         private int hitIslandTimer = 0;
+        private Vector2 shipIColSpot = new Vector2(-1,-1);
 
         public Player (int shipType, int pNum)
         {
@@ -120,7 +121,7 @@ namespace Main
                     shipSpeed = maxShipSpeed;
                 }
 
-                Console.WriteLine("acc");
+                //Console.WriteLine("acc");
                 
             } else
             {
@@ -348,7 +349,7 @@ namespace Main
             }
             if (targetDest[0] >= 0 || targetDest[1] >= 0)
             {
-                 Console.WriteLine("MOVING TO DEST");
+                 //Console.WriteLine("MOVING TO DEST");
 
                 if (!charForm)
                 {
@@ -590,6 +591,7 @@ namespace Main
                 targetDest[0] = -1;
                 targetDest[1] = -1;
                 decellMode = true;
+                Button bob = new Button(0, (int)(shipIColSpot.X), (int)(shipIColSpot.Y)); //create docking button
             } else
             {
                 if (hitIslandTimer > 15)
@@ -598,7 +600,7 @@ namespace Main
                 }
             }
 
-            Console.WriteLine(shipSpeed + " speeds");
+            //Console.WriteLine(shipSpeed + " speeds");
         }
 
         public float changeMagn (float num, float inc)
@@ -823,7 +825,7 @@ namespace Main
         /// <param name="heightB">Height of the second sprite's texture.</param>
         /// <param name="dataB">Pixel color data of the second sprite.</param>
         /// <returns>True if non-transparent pixels overlap; false otherwise</returns>
-        static bool IntersectPixels(
+        bool IntersectPixels(
             Matrix transformA, int widthA, int heightA, Color[] dataA,
             Matrix transformB, int widthB, int heightB, Color[] dataB)
         {
@@ -857,6 +859,8 @@ namespace Main
                         if (colorA.A != 0 && colorB.A != 0)
                         {
                             // then an intersection has been found
+                            Vector2 collSpot = Vector2.Transform(new Vector2(xA, yA), transformA);
+                            shipIColSpot = collSpot;
                             return true;
                         }
                     }
@@ -864,6 +868,7 @@ namespace Main
             }
 
             // No intersection found
+            shipIColSpot = new Vector2(-1, -1);
             return false;
         }
     }

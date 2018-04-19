@@ -92,7 +92,11 @@ namespace Main
 
             // TODO: Add your update logic here
             MouseState ms = Mouse.GetState();
-            if (ms.LeftButton == ButtonState.Pressed)
+
+            bool buttAction = Button.mouseInteract(ms);
+            //if no button pressed, allow click to be used for player control
+
+            if (!buttAction && ms.LeftButton == ButtonState.Pressed)
             {
                 //process movement command by user (after checking buttons)
                 if (!Player.charForm) //ship form
@@ -100,7 +104,7 @@ namespace Main
                     if (ms.X >= 0 && ms.X <= dim[0] && ms.Y >= 0 && ms.Y <= dim[1])
                     {
                         play.setTarget(ms.X, ms.Y);
-                        Button.mouseInteract(ms);
+                        
                     }
                     
                 }
@@ -111,7 +115,8 @@ namespace Main
                     play.shipNoClick();
                 }
             }
-            
+
+            Button.fadeDyingButts();
             play.move_collisioncheck();
             //update viewing port in case player moved
             Game1.viewingPort = new Rectangle(map.adjFact[0], map.adjFact[1], (int)(Game1.dim[0] * 1.0 /Game1.viewingScale) + 300, (int)(Game1.dim[1] * 1.0 /Game1.viewingScale) + 300);
@@ -138,7 +143,7 @@ namespace Main
 
             map.render();
             play.render();
-
+            Button.renderAll();
             //for TESTING
             
 

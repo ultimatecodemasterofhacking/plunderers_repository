@@ -45,9 +45,9 @@ namespace Main
             for (int p = 0; p < 25; p++)
             {
                 int itemInd = rand.Next(decTexts.Length);
-                Console.WriteLine("this itemInd is " + itemInd);
-                Console.WriteLine(decTexts.Length + " " +decScales.Length);
-                Console.WriteLine((isloc.Y + decEdgeBuffer) + " is less than " + (isloc.Height - decEdgeBuffer - (int)(decTexts[itemInd].Height * decScales[itemInd])));
+                //Console.WriteLine("this itemInd is " + itemInd);
+               // Console.WriteLine(decTexts.Length + " " +decScales.Length);
+               // Console.WriteLine((isloc.Y + decEdgeBuffer) + " is less than " + (isloc.Height - decEdgeBuffer - (int)(decTexts[itemInd].Height * decScales[itemInd])));
                 int tryX = rand.Next(isloc.X + decEdgeBuffer + (int)(decTexts[itemInd].Width * decScales[itemInd]/2), isloc.X + isloc.Width - decEdgeBuffer - (int)(decTexts[itemInd].Width * decScales[itemInd]/2));
                 int tryY = rand.Next(isloc.Y + decEdgeBuffer + (int)(decTexts[itemInd].Height * decScales[itemInd] / 2), isloc.Y + isloc.Height - decEdgeBuffer - (int)(decTexts[itemInd].Height * decScales[itemInd]/2));
 
