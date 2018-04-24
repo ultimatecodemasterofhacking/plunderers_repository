@@ -18,7 +18,7 @@ namespace Main
         public Color[] islandTextureData;
         public Texture2D tmT = game.Content.Load<Texture2D>("testing_mask");
         public Decoration[] decs;
-        private int decEdgeBuffer = 75;
+        private int decEdgeBuffer = 70; //was 75
         public static Random rand;
         private int interItemBuffer = 10;
 
@@ -42,35 +42,56 @@ namespace Main
             List<Rectangle> tempCollCheckDecs = new List<Rectangle>();
 
 
-            for (int p = 0; p < 25; p++)
+            for (int p = 0; p < 60; p++)
             {
-                int itemInd = rand.Next(decTexts.Length);
+                int itemInd = rand.Next(decTexts.Length+10);
+                if (itemInd >= decTexts.Length)
+                {
+                    itemInd = 0; //for palm trees, to make them more likely
+                }
                 //Console.WriteLine("this itemInd is " + itemInd);
                // Console.WriteLine(decTexts.Length + " " +decScales.Length);
-               // Console.WriteLine((isloc.Y + decEdgeBuffer) + " is less than " + (isloc.Height - decEdgeBuffer - (int)(decTexts[itemInd].Height * decScales[itemInd])));
-                int tryX = rand.Next(isloc.X + decEdgeBuffer + (int)(decTexts[itemInd].Width * decScales[itemInd]/2), isloc.X + isloc.Width - decEdgeBuffer - (int)(decTexts[itemInd].Width * decScales[itemInd]/2));
-                int tryY = rand.Next(isloc.Y + decEdgeBuffer + (int)(decTexts[itemInd].Height * decScales[itemInd] / 2), isloc.Y + isloc.Height - decEdgeBuffer - (int)(decTexts[itemInd].Height * decScales[itemInd]/2));
+                Console.WriteLine((isloc.X + decEdgeBuffer + (int)(decTexts[itemInd].Width * decScales[itemInd] / 2)) + " is less than " + (isloc.X + isloc.Width - decEdgeBuffer - (int)(decTexts[itemInd].Width * decScales[itemInd] / 2)));
+                int tryX = -100;
+                int tryY = -100;
+                if ((isloc.X + decEdgeBuffer + (int)(decTexts[itemInd].Width * decScales[itemInd] / 2)) < (isloc.X + isloc.Width - decEdgeBuffer - (int)(decTexts[itemInd].Width * decScales[itemInd] / 2)))
+                {
+                    tryX = rand.Next(isloc.X + decEdgeBuffer + (int)(decTexts[itemInd].Width * decScales[itemInd] / 2), isloc.X + isloc.Width - decEdgeBuffer - (int)(decTexts[itemInd].Width * decScales[itemInd] / 2));
+                }
+                if ((isloc.Y + decEdgeBuffer + (int)(decTexts[itemInd].Height * decScales[itemInd] / 2)) < (isloc.Y + isloc.Height - decEdgeBuffer - (int)(decTexts[itemInd].Height * decScales[itemInd] / 2)))
+                {
+                    tryY = rand.Next(isloc.Y + decEdgeBuffer + (int)(decTexts[itemInd].Height * decScales[itemInd] / 2), isloc.Y + isloc.Height - decEdgeBuffer - (int)(decTexts[itemInd].Height * decScales[itemInd] / 2));
+                }
+                //tryX = rand.Next(isloc.X + decEdgeBuffer + (int)(decTexts[itemInd].Width * decScales[itemInd]/2), isloc.X + isloc.Width - decEdgeBuffer - (int)(decTexts[itemInd].Width * decScales[itemInd]/2));
+               // tryY = rand.Next(isloc.Y + decEdgeBuffer + (int)(decTexts[itemInd].Height * decScales[itemInd] / 2), isloc.Y + isloc.Height - decEdgeBuffer - (int)(decTexts[itemInd].Height * decScales[itemInd]/2));
 
                 //test for collisions with other islands
-                bool collides = false;
-                Rectangle potential = new Rectangle(tryX, tryY, (int)(decTexts[itemInd].Width * decScales[itemInd]), (int)(decTexts[itemInd].Height * decScales[itemInd]));
-                for (int b = 0; b < tempDecs.Count(); b++)
+                if (tryX != -100 && tryY != -100)
                 {
-                    if (tempCollCheckDecs[b].Intersects(potential))
+                    bool collides = false;
+                    Rectangle potential = new Rectangle(tryX, tryY, (int)(decTexts[itemInd].Width * decScales[itemInd]), (int)(decTexts[itemInd].Height * decScales[itemInd]));
+                    for (int b = 0; b < tempDecs.Count(); b++)
                     {
-                        collides = true;
-                        break;
+                        if (tempCollCheckDecs[b].Intersects(potential))
+                        {
+                            collides = true;
+                            break;
+                        }
                     }
+
+                    if (!collides)
+                    {
+                        //Console.WriteLine("xWorkd " + tryX);
+                        //Console.WriteLine("yWorkd " + tryY);
+                        tempDecs.Add(new Decoration(potential, itemInd));
+                        tempCollCheckDecs.Add(new Rectangle(potential.X - interItemBuffer - potential.Width / 2, potential.Y - interItemBuffer - potential.Height / 2, potential.Width + interItemBuffer * 2, potential.Height + interItemBuffer * 2));
+
+                    }
+                } else
+                {
+                    p--;
                 }
                 
-                if (!collides)
-                {
-                    //Console.WriteLine("xWorkd " + tryX);
-                    //Console.WriteLine("yWorkd " + tryY);
-                    tempDecs.Add(new Decoration(potential, itemInd));
-                    tempCollCheckDecs.Add(new Rectangle(potential.X - interItemBuffer - potential.Width/2, potential.Y - interItemBuffer - potential.Height / 2, potential.Width + interItemBuffer * 2, potential.Height + interItemBuffer * 2));
-
-                }
             }
             decs = new Decoration[tempDecs.Count()];
             for (int b = 0; b < tempDecs.Count(); b++)

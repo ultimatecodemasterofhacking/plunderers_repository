@@ -29,42 +29,51 @@ namespace Main
         private int timerSwitch = 0;
         private int alpha = 255;
         private static int deadButtSwitch = 25;
+        private static int maxDockButtNum = 3;
+        private static int dockButtNum = 0;
 
         //x and y are map relative
         public Button (int ty, int x, int y)
         {
+            
             buttType = ty;
-
-            myTexts = new Texture2D[3];
-            for (int i=0; i<myTexts.Length; i++)
+            if (buttType == 0 && dockButtNum < maxDockButtNum)
             {
-                myTexts[i] = allTexts[buttType,i];
+                myTexts = new Texture2D[3];
+                for (int i = 0; i < myTexts.Length; i++)
+                {
+                    myTexts[i] = allTexts[buttType, i];
+                }
+                switch (buttType)
+                {
+                    case 0: //for docking at an island
+                        buttScale = .8f;
+                        timed = true;
+                        timer = 0;
+                        timerSwitch = 160;
+                        dockButtNum++;
+                        break;
+                }
+                alpha = 255;
+
+                buttRect = new Rectangle(x, y, (int)(myTexts[0].Width * buttScale), (int)(myTexts[0].Height * buttScale));
+
+                status = 0; //0 for regular, 1 for highlighted, 2 for pressed
+
+                livingButts.Add(this);
             }
-            switch(buttType)
-            {
-                case 0: //for docking at an island
-                    buttScale = .7f;
-                    timed = true;
-                    timer = 0;
-                    timerSwitch = 160;
-                    break;
-            }
-            alpha = 255;
-
-            buttRect = new Rectangle(x, y, (int)(myTexts[0].Width * buttScale), (int)(myTexts[0].Height * buttScale));
-
-            status = 0; //0 for regular, 1 for highlighted, 2 for pressed
-
-            livingButts.Add(this);
+            
         }
 
-        public bool update (bool freshPress, bool freshRelease)
+        public int update (bool freshPress, bool freshRelease) //0 is nothing, 1 is action, -1 is intersection
         {
             bool buttonClicked = false;
+            bool intersection = false;
            // Console.WriteLine("doing the butt method");
             if (inDatRect(msX, msY, buttRect)) //could affect this particular button
             {
                 // Console.WriteLine("mouse in a butt");
+                intersection = true;
                 /*
                  switch (status)
                  {
@@ -72,7 +81,7 @@ namespace Main
                          status = 1;
                          break;
                      case 1: //highlighted
-                         if (mouseDown || freshPress)
+                         if (freshPress)
                          {
                              status = 2;
                          }
@@ -109,20 +118,28 @@ namespace Main
                 }
                 */
                 
-                status = 1;
-                if (freshPress)
+                if (status==0)
+                {
+                    status = 1;
+                }
+                if (status == 1 && freshPress)
+                {
+                    status = 2;
+                } else if (status==2 && mouseDown)
                 {
                     status = 2;
                 }
-                if (freshRelease)
+                if (status == 2 && freshRelease)
                 {
                     //time to trigger this button's event!
                     buttonClicked = true;
                     Console.WriteLine("Button Released! Action to happen");
                 }
                 
+                
             } else
             {
+               // Console.WriteLine("not in butt");
                 status = 0;
             }
             //now deal with timers and lifespan for terminal buttons
@@ -144,10 +161,23 @@ namespace Main
                 dyingButts.Add(this);
                 timer = deadButtSwitch;
             }
+            if (buttonClicked)
+            {
+                return 1;
+            } else
+            {
+                if (intersection && mouseDown)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
 
 
-
-            return buttonClicked;
+            
             
         }
 
@@ -170,11 +200,16 @@ namespace Main
             {
                 dyingButts[i].timer--;
                 dyingButts[i].alpha = (int)((dyingButts[i].timer*1.0/deadButtSwitch) * 255);
-                Console.WriteLine("a dying alpha "  + dyingButts[i].alpha);
+               // Console.WriteLine("a dying alpha "  + dyingButts[i].alpha);
                 
                 if (dyingButts[i].timer<0)
                 {
-                    dyingButts.Remove(dyingButts[i]);
+                    if (dyingButts[i].buttType==0)
+                    {
+                        dockButtNum--;
+                    }
+                    dyingButts.Remove(dyingButts[i]); //final death
+                    
                 }
             }
         }
@@ -182,10 +217,10 @@ namespace Main
 
         public static bool inDatRect (int x, int y, Rectangle rect)
         {
-            return new Rectangle(rect.X-rect.Width/2, rect.Y-rect.Height/2, rect.Width, rect.Height).Intersects(new Rectangle(x -  + map.adjFact[0], y + map.adjFact[1], 2, 2));
+            return new Rectangle(rect.X-rect.Width/2 - map.adjFact[0], rect.Y-rect.Height - map.adjFact[1], rect.Width, rect.Height).Intersects(new Rectangle(x , y , 2, 2));
         }
 
-        public static bool mouseInteract (MouseState ms)
+        public static int mouseInteract (MouseState ms) //0 is nothing, 1 is action, -1 is mouse intersection
         {
             bool freshPress = false;
             bool freshRelease = false;
@@ -208,18 +243,34 @@ namespace Main
             }
             msX = ms.X;
             msY = ms.Y;
-
+            bool intersection = false;
             bool actionOccurred = false;
             for (int i=livingButts.Count-1; i>=0; i--)
             {
-                bool tempOccur = livingButts[i].update(freshPress, freshRelease);
-                if (tempOccur == true)
+                int tempOccur = livingButts[i].update(freshPress, freshRelease);
+                if (tempOccur == 1)
                 {
                     actionOccurred = true;
                     break;
                 }
+                if (tempOccur == -1)
+                {
+                    intersection = true;
+                }
             }
-            return actionOccurred;
+            if (actionOccurred == true)
+            {
+                return 1;
+            } else
+            {
+                if (intersection)
+                {
+                    return -1;
+                } else
+                {
+                    return 0;
+                }
+            }
         }
 
         public void render()

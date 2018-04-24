@@ -24,7 +24,9 @@ namespace Main
         Player play;
         public static float viewingScale = 1.0f;
         public static Rectangle viewingPort;
-
+        private int buttUsageDelayTimer = 0;
+        private int buttUsageDelaySwitch = 20;
+        private bool buttUsageDelay = false;
         int[] tPT; //target player traversal
 
         public Game1()
@@ -93,10 +95,23 @@ namespace Main
             // TODO: Add your update logic here
             MouseState ms = Mouse.GetState();
 
-            bool buttAction = Button.mouseInteract(ms);
+            int buttAction = Button.mouseInteract(ms);
             //if no button pressed, allow click to be used for player control
+            if (buttAction == 1 || buttAction == -1)
+            {
+                buttUsageDelay = true;
+            }
+            if (buttUsageDelay)
+            {
+                buttUsageDelayTimer++;
+                if (buttUsageDelayTimer>=buttUsageDelaySwitch)
+                {
+                    buttUsageDelayTimer = 0;
+                    buttUsageDelay = false;
+                }
+            }
 
-            if (!buttAction && ms.LeftButton == ButtonState.Pressed)
+            if (!buttUsageDelay && ms.LeftButton == ButtonState.Pressed)
             {
                 //process movement command by user (after checking buttons)
                 if (!Player.charForm) //ship form

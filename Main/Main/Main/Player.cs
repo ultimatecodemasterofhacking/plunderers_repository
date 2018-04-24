@@ -170,7 +170,7 @@ namespace Main
                     collision = IntersectPixels(shipMat, shipT[shipInd].Width, shipT[shipInd].Height, shipTextureData, islandMat, isleToCheck.islandT.Width, isleToCheck.islandT.Height, isleToCheck.islandTextureData);
                     if (collision)
                     {
-                        Console.WriteLine("COLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        //Console.WriteLine("COLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         collision = true;
                         break;
                     }
@@ -560,7 +560,7 @@ namespace Main
                     collision = IntersectPixels(shipMat, shipT[shipInd].Width, shipT[shipInd].Height, shipTextureData, islandMat, isleToCheck.islandT.Width, isleToCheck.islandT.Height, isleToCheck.islandTextureData);
                     if (collision)
                     {
-                        Console.WriteLine("COLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                       // Console.WriteLine("COLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         collision = true;
                         break;
                     }
