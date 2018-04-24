@@ -22,7 +22,7 @@ namespace Main
         public static int[] dim = new int[2];
         Map map;
         Player play;
-        public static float viewingScale = 1.0f;
+        public static float viewingScale = .55f;
         public static Rectangle viewingPort;
         private int buttUsageDelayTimer = 0;
         private int buttUsageDelaySwitch = 20;
@@ -134,7 +134,7 @@ namespace Main
             Button.fadeDyingButts();
             play.move_collisioncheck();
             //update viewing port in case player moved
-            Game1.viewingPort = new Rectangle(map.adjFact[0], map.adjFact[1], (int)(Game1.dim[0] * 1.0 /Game1.viewingScale) + 300, (int)(Game1.dim[1] * 1.0 /Game1.viewingScale) + 300);
+            Game1.viewingPort = new Rectangle(map.adjFact[0], map.adjFact[1], (int)(Game1.dim[0] * Game1.viewingScale) + 300, (int)(Game1.dim[1] *Game1.viewingScale) + 300);
             //Console.WriteLine(play.shipSpeed);
             map.decideWhatToDraw();
             //play.collisionCheckMapStuff();

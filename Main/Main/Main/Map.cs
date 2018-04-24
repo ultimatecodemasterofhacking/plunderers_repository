@@ -151,7 +151,7 @@ namespace Main
                     //sb.Draw(waterT[r, c], new Rectangle(waterR[r, c].X-adjFact[0], waterR[r, c].Y - adjFact[1], waterR[r,c].Width, waterR[r,c].Height), Color.White);\
                     if (Game1.viewingPort.Intersects(new Rectangle(waterR[r,c].X, waterR[r,c].Y, waterR[r,c].Width, waterR[r,c].Height)))
                     {
-                        sb.Draw(waterT[r, c], new Vector2(waterR[r, c].X - adjFact[0], waterR[r, c].Y - adjFact[1]), new Rectangle(0, 0, waterT[r, c].Width, waterT[r, c].Height), Color.White, 0f, new Vector2(0, 0), Game1.viewingScale, SpriteEffects.None, 0);
+                        sb.Draw(waterT[r, c], new Vector2((int)((waterR[r, c].X - adjFact[0])*1.0f/Game1.viewingScale), (int)((waterR[r, c].Y - adjFact[1])*1.0f/Game1.viewingScale)), new Rectangle(0, 0, waterT[r, c].Width, waterT[r, c].Height), Color.White, 0f, new Vector2(0, 0), 1.0f/Game1.viewingScale, SpriteEffects.None, 0);
                     }
                     
                 }

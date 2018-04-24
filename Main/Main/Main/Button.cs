@@ -275,7 +275,7 @@ namespace Main
 
         public void render()
         {
-            sb.Draw(myTexts[status], new Vector2(buttRect.X - map.adjFact[0], buttRect.Y - map.adjFact[1]), new Rectangle(0, 0, myTexts[status].Width, myTexts[status].Height), new Color(255,255,255,alpha), 0, new Vector2(myTexts[status].Width / 2, myTexts[status].Height / 2), Game1.viewingScale * buttScale, SpriteEffects.None, 0);
+            sb.Draw(myTexts[status], new Vector2((int)((buttRect.X - map.adjFact[0])*1.0f/Game1.viewingScale), (int)((buttRect.Y - map.adjFact[1])*1.0f/Game1.viewingScale)), new Rectangle(0, 0, myTexts[status].Width, myTexts[status].Height), new Color(255,255,255,alpha), 0, new Vector2(myTexts[status].Width / 2, myTexts[status].Height / 2), 1.0f/Game1.viewingScale * buttScale, SpriteEffects.None, 0);
             
         }
         

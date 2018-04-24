@@ -93,7 +93,7 @@ namespace Main
 
         public void render ()
         {
-            sb.Draw(decTexts[itemIndex], new Vector2(decRect.X - map.adjFact[0], decRect.Y - map.adjFact[1]), new Rectangle(0, 0, decTexts[itemIndex].Width, decTexts[itemIndex].Height), myColor, decRot, new Vector2(decTexts[itemIndex].Width/2, decTexts[itemIndex].Height/2), Game1.viewingScale * decScales[itemIndex], SpriteEffects.None, 0);
+            sb.Draw(decTexts[itemIndex], new Vector2((int)((decRect.X - map.adjFact[0])*1.0f/Game1.viewingScale),(int)(( decRect.Y - map.adjFact[1])*1.0f/Game1.viewingScale)), new Rectangle(0, 0, decTexts[itemIndex].Width, decTexts[itemIndex].Height), myColor, decRot, new Vector2(decTexts[itemIndex].Width/2, decTexts[itemIndex].Height/2), 1.0f/Game1.viewingScale * decScales[itemIndex], SpriteEffects.None, 0);
         }
     }
 }

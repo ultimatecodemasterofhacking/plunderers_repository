@@ -106,7 +106,7 @@ namespace Main
 
         public int[] centerRelScreen()
         {
-            int[] cent = { shipR.X + shipR.Width / 2 - map.adjFact[0], shipR.Y + shipR.Height / 2 - map.adjFact[1] };
+            int[] cent = { (int)((shipR.X + shipR.Width / 2 - map.adjFact[0])*1.0f/Game1.viewingScale), (int)((shipR.Y + shipR.Height / 2 - map.adjFact[1])*1.0f/Game1.viewingScale) };
             return cent;
         }
 
@@ -743,8 +743,10 @@ namespace Main
 
         }
 
+        //incorporate scaling into adjusting the map adjustment factor
         public void ensureCameraWithinBoundaries (float xAmt, float yAmt)
         {
+            Console.WriteLine(centerRelScreen()[0] + " " + centerRelScreen()[1]);
             int shipCenterXAdjustment = 130;
             for (int i=0; i<2; i++)
             {
@@ -789,7 +791,7 @@ namespace Main
 
         {
             //sb.Draw(shipT[shipInd],new Rectangle(shipR.X -map.adjFact[0], shipR.Y -map.adjFact[1], shipR.Width, shipR.Height), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), SpriteEffects.None, 0);
-            sb.Draw(shipT[shipInd], new Vector2((shipR.X - map.adjFact[0]), shipR.Y - map.adjFact[1]), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), testing?Color.Red:Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), Game1.viewingScale*shipScale, SpriteEffects.None, 0);
+            sb.Draw(shipT[shipInd], new Vector2((int)((shipR.X - map.adjFact[0])*1.0f/Game1.viewingScale), (int)((shipR.Y - map.adjFact[1])*1.0f/Game1.viewingScale)), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), testing?Color.Red:Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), 1.0f/Game1.viewingScale*shipScale, SpriteEffects.None, 0);
             int[] shipMapCent = centerOnMap();
             // Matrix shipMat = Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) * Matrix.CreateScale(shipScale) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
             Matrix shipMat = Matrix.CreateScale(shipScale) * Matrix.CreateTranslation(-shipT[shipInd].Width/2*shipScale, -shipT[shipInd].Height/2*shipScale, 0) *  Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);

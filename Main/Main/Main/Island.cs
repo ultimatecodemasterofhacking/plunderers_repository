@@ -104,7 +104,7 @@ namespace Main
         {
             if (Game1.viewingPort.Intersects(isloc))
             {
-                sb.Draw(islandT, new Vector2(isloc.X - map.adjFact[0], isloc.Y - map.adjFact[1]), new Rectangle(0, 0, islandT.Width, islandT.Height), Color.White, 0, new Vector2(0,0), Game1.viewingScale * Map.islandScale, SpriteEffects.None, 0);
+                sb.Draw(islandT, new Vector2((int)((isloc.X - map.adjFact[0])*1.0f/Game1.viewingScale), (int)((isloc.Y - map.adjFact[1])*1.0f/Game1.viewingScale)), new Rectangle(0, 0, islandT.Width, islandT.Height), Color.White, 0, new Vector2(0,0), 1.0f/Game1.viewingScale * Map.islandScale, SpriteEffects.None, 0);
                 // sb.Draw(tmT, new Rectangle(isloc.X-map.adjFact[0], isloc.Y - map.adjFact[1], (int)(isloc.Width*Game1.viewingScale), (int)(isloc.Height * Game1.viewingScale)), Color.White);
                 for (int i=0; i<decs.Count(); i++)
                 {
