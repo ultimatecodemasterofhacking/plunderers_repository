@@ -192,5 +192,12 @@ namespace Main
             islandsToDraw = islandsToDrawTemp;
         }
 
+        public void update ()
+        {
+            decideWhatToDraw();
+            map.maxAdjFact[0] = mapWidth - Game1.viewingPort.Width;
+            map.maxAdjFact[1] = mapHeight - Game1.viewingPort.Height;
+        }
+
     }
 }

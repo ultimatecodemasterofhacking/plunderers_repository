@@ -14,7 +14,7 @@ namespace Main
     class Button : Drawable
     {
         public Rectangle buttRect;
-        private int buttType;
+        public int buttType;
         private static Texture2D[,] allTexts;
         private Texture2D[] myTexts;
         public static List<Button> livingButts;
@@ -31,6 +31,7 @@ namespace Main
         private static int deadButtSwitch = 25;
         private static int maxDockButtNum = 3;
         private static int dockButtNum = 0;
+        public int assocIsleInd = -1;
 
         //x and y are map relative
         public Button (int ty, int x, int y)
@@ -39,6 +40,7 @@ namespace Main
             buttType = ty;
             if (buttType == 0 && dockButtNum < maxDockButtNum)
             {
+                assocIsleInd = Player.latestIsleColInd;
                 myTexts = new Texture2D[3];
                 for (int i = 0; i < myTexts.Length; i++)
                 {
@@ -217,13 +219,14 @@ namespace Main
 
         public static bool inDatRect (int x, int y, Rectangle rect)
         {
-            return new Rectangle(rect.X-rect.Width/2 - map.adjFact[0], rect.Y-rect.Height - map.adjFact[1], rect.Width, rect.Height).Intersects(new Rectangle(x , y , 2, 2));
+            return new Rectangle((int)(1.0f/Game1.viewingScale*(rect.X-rect.Width/2 - map.adjFact[0])), (int)(1.0f / Game1.viewingScale * (rect.Y-rect.Height/2 - map.adjFact[1])), (int)(1.0f / Game1.viewingScale * rect.Width), (int)(1.0f / Game1.viewingScale * rect.Height)).Intersects(new Rectangle(x , y , 2, 2));
         }
 
-        public static int mouseInteract (MouseState ms) //0 is nothing, 1 is action, -1 is mouse intersection
+        public static object mouseInteract (MouseState ms) //0 is nothing, a butt is action, -1 is mouse intersection
         {
             bool freshPress = false;
             bool freshRelease = false;
+            
 
             if (ms.LeftButton == ButtonState.Pressed)
             {
@@ -245,12 +248,15 @@ namespace Main
             msY = ms.Y;
             bool intersection = false;
             bool actionOccurred = false;
+            Button theButt = null;
             for (int i=livingButts.Count-1; i>=0; i--)
             {
-                int tempOccur = livingButts[i].update(freshPress, freshRelease);
+                Button currButt = livingButts[i];
+                int tempOccur = currButt.update(freshPress, freshRelease);
                 if (tempOccur == 1)
                 {
                     actionOccurred = true;
+                    theButt = currButt;
                     break;
                 }
                 if (tempOccur == -1)
@@ -260,7 +266,7 @@ namespace Main
             }
             if (actionOccurred == true)
             {
-                return 1;
+                return theButt;
             } else
             {
                 if (intersection)

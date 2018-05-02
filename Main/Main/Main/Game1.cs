@@ -22,7 +22,7 @@ namespace Main
         public static int[] dim = new int[2];
         Map map;
         Player play;
-        public static float viewingScale = .55f;
+        public static float viewingScale = .57f;
         public static Rectangle viewingPort;
         private int buttUsageDelayTimer = 0;
         private int buttUsageDelaySwitch = 20;
@@ -95,9 +95,9 @@ namespace Main
             // TODO: Add your update logic here
             MouseState ms = Mouse.GetState();
 
-            int buttAction = Button.mouseInteract(ms);
+            object buttAction = Button.mouseInteract(ms);
             //if no button pressed, allow click to be used for player control
-            if (buttAction == 1 || buttAction == -1)
+            if (buttAction.GetType() == typeof(Button) || (int)buttAction == -1)
             {
                 buttUsageDelay = true;
             }
@@ -110,6 +110,16 @@ namespace Main
                     buttUsageDelay = false;
                 }
             }
+            if (buttAction.GetType() == typeof(Button))
+            {
+                Button clickedButt = (Button)buttAction;
+                //process button action request
+                if (clickedButt.buttType == 0) //request to dock
+                {
+                    play.dock(clickedButt);
+                }
+            }
+            
 
             if (!buttUsageDelay && ms.LeftButton == ButtonState.Pressed)
             {
@@ -134,9 +144,10 @@ namespace Main
             Button.fadeDyingButts();
             play.move_collisioncheck();
             //update viewing port in case player moved
-            Game1.viewingPort = new Rectangle(map.adjFact[0], map.adjFact[1], (int)(Game1.dim[0] * Game1.viewingScale) + 300, (int)(Game1.dim[1] *Game1.viewingScale) + 300);
+            Game1.viewingPort = new Rectangle(map.adjFact[0], map.adjFact[1], (int)((Game1.dim[0] )*Game1.viewingScale), (int)((Game1.dim[1] )*Game1.viewingScale)); // plus 300 width and height maybe
             //Console.WriteLine(play.shipSpeed);
-            map.decideWhatToDraw();
+            map.update();
+            //map.decideWhatToDraw();
             //play.collisionCheckMapStuff();
 
             base.Update(gameTime);

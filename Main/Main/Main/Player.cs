@@ -47,6 +47,11 @@ namespace Main
         private bool hitIsland = false;
         private int hitIslandTimer = 0;
         private Vector2 shipIColSpot = new Vector2(-1,-1);
+        public static int latestIsleColInd = -1;
+        private static int spawnIsleEdgeBuffer = 30;
+        private float charX = 0;
+        private float charY = 0;
+        private float charHeadingRad = 0;
 
         public Player (int shipType, int pNum)
         {
@@ -66,18 +71,14 @@ namespace Main
             shipHeadingRad = 0;
             shipTurnSpeed = .05f;
             tmT = game.Content.Load<Texture2D>("testing_mask");
-
-            switch (shipType)
-            {
-                case 0:
-                    shipInd = 0;
-                    shipT = new Texture2D[1];
-                    shipT[0] = game.Content.Load<Texture2D>("shiptestcropped");
-                    shipR = new Rectangle(0, 0, (int)(shipT[0].Width * shipScale), (int)(shipT[0].Height * shipScale));
-                    shipTextureData = new Color[shipT[shipInd].Width * shipT[shipInd].Height];
-                    
-                    break;
-            }
+            //all ship textures
+            shipInd = shipType;
+            shipT = new Texture2D[1];
+            shipT[0] = game.Content.Load<Texture2D>("shiptestcropped");
+            shipTextureData = new Color[shipT[shipInd].Width * shipT[shipInd].Height];
+            shipR = new Rectangle(0, 0, (int)(shipT[shipInd].Width * shipScale), (int)(shipT[shipInd].Height * shipScale));
+            
+            //situate beginning player ship locations
             switch (pNum)
             {
                 case 1:
@@ -93,7 +94,7 @@ namespace Main
                     shipGoalHeading = -1;
                     break;
             }
-            shipTextureData = new Color[shipT[shipInd].Width * shipT[shipInd].Height];
+           // shipTextureData = new Color[shipT[shipInd].Width * shipT[shipInd].Height];
             shipT[shipInd].GetData(shipTextureData);
 
         }
@@ -416,17 +417,17 @@ namespace Main
                         tempShipRX = shipR.X;
                         xAmt = 0;
                     }
-                    if (tempShipRX + shipR.Width >= map.mapWidth)
+                    if (tempShipRX + shipR.Width / 2.0f >= map.mapWidth)
                     {
-                        xAmt = map.mapWidth - shipR.Width - (tempShipRX);
-                        tempShipRX = map.mapWidth - shipR.Width;
+                        xAmt = map.mapWidth - shipR.Width / 2.0f - (tempShipRX);
+                        tempShipRX = map.mapWidth - shipR.Width / 2.0f;
                         tempShipRY = shipR.Y;
                         yAmt = 0;
                     }
-                    if (tempShipRY + shipR.Height >= map.mapHeight)
+                    if (tempShipRY + shipR.Height / 2.0f >= map.mapHeight)
                     {
-                        yAmt = map.mapHeight - shipR.Height - (tempShipRY);
-                        tempShipRY = map.mapHeight - shipR.Height;
+                        yAmt = map.mapHeight - shipR.Height/2.0f - (tempShipRY);
+                        tempShipRY = map.mapHeight/2.0f - shipR.Height;
                         tempShipRX = shipR.X;
                         xAmt = 0;
                     }
@@ -562,6 +563,8 @@ namespace Main
                     {
                        // Console.WriteLine("COLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         collision = true;
+                        latestIsleColInd = Array.IndexOf(map.islands, isleToCheck);
+                        //Console.WriteLine("wowowowow " + latestIsleColInd);
                         break;
                     }
 
@@ -587,7 +590,7 @@ namespace Main
                 shipHeadingRad -= radTurned;
                 //shipGoalHeading = shipHeadingRad - radTurned;
                 ensureCameraWithinBoundaries(-changeMagn(xMoved, 3), -changeMagn(yMoved, 3));
-                shipSpeed = -shipSpeed/3-2;
+                shipSpeed = -shipSpeed/3.5f-2.5f;
                 targetDest[0] = -1;
                 targetDest[1] = -1;
                 decellMode = true;
@@ -601,6 +604,28 @@ namespace Main
             }
 
             //Console.WriteLine(shipSpeed + " speeds");
+        }
+
+        public void dock (Button clickedButt)
+        {
+            //TODO
+            int x1 = clickedButt.buttRect.X;
+            int y1 = clickedButt.buttRect.Y;
+            int x2 = map.islands[clickedButt.assocIsleInd].isloc.X;
+            int y2 = map.islands[clickedButt.assocIsleInd].isloc.Y;
+            int B = spawnIsleEdgeBuffer;
+            double theta = Math.Atan2(y1-y2, x1-x2);
+            double D = Math.Sqrt((y1 - y2)*(y1 - y2) + (x1 - x2)*(x1 - x2));
+            double A = D - B;
+            int x3 = (int)Math.Round(A*Math.Cos(theta));
+            int y3 = (int)Math.Round(A * Math.Sin(theta));
+            int x4 = x2 + x3;
+            int y4 = y2 + y3;
+            charX = x4;
+            charY = y4;
+            charHeadingRad =(float)( 2 * Math.PI - theta);
+            //the final switch on
+            charForm = true;
         }
 
         public float changeMagn (float num, float inc)
@@ -706,7 +731,7 @@ namespace Main
                 }
                 */
                 goalHeading = (float)(Math.Atan(Math.Abs((targetDest[1] - pCent[1])) * 1.0 / Math.Abs(targetDest[0] - pCent[0])));
-
+                
                 if (goalHeading > Math.PI / 2 || goalHeading < 0)
                 {
                     Console.WriteLine("PROBLEM GOAL: " + goalHeading);
@@ -747,7 +772,7 @@ namespace Main
         public void ensureCameraWithinBoundaries (float xAmt, float yAmt)
         {
             Console.WriteLine(centerRelScreen()[0] + " " + centerRelScreen()[1]);
-            int shipCenterXAdjustment = 130;
+            int shipCenterXAdjustment = 130; //should be 130
             for (int i=0; i<2; i++)
             {
                 if (map.preciseAdjFact[i] <= 0) // onLeft
@@ -756,17 +781,17 @@ namespace Main
 
                     if (centerRelScreen()[i] >= Game1.dim[i] / 2 + (i==0? shipCenterXAdjustment : 0))
                     {
-                        map.preciseAdjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2 - (i == 0 ? shipCenterXAdjustment : 0);
+                        map.preciseAdjFact[i] += Game1.viewingScale*(centerRelScreen()[i] - (Game1.dim[i] / 2 + (i == 0 ? shipCenterXAdjustment : 0)));
                     }
                 }
                 else if (map.preciseAdjFact[i] >= map.maxAdjFact[i]) //onRight
                 {
-                    map.preciseAdjFact[i] = map.maxAdjFact[i];
+                    //map.preciseAdjFact[i] = map.maxAdjFact[i] * 1.0f / Game1.viewingScale;
                     //Console.WriteLine("Scrolling");
                     if (centerRelScreen()[i] <= Game1.dim[i] / 2 + (i == 0 ? shipCenterXAdjustment : 0))
                     {
                         
-                        map.preciseAdjFact[i] += centerRelScreen()[i] - Game1.dim[i] / 2 - (i == 0 ? shipCenterXAdjustment : 0);
+                        map.preciseAdjFact[i] += Game1.viewingScale * (centerRelScreen()[i] - (Game1.dim[i] / 2 + (i == 0 ? shipCenterXAdjustment : 0)));
                     }
                 } else
                 {
@@ -790,28 +815,36 @@ namespace Main
         public void render ()
 
         {
-            //sb.Draw(shipT[shipInd],new Rectangle(shipR.X -map.adjFact[0], shipR.Y -map.adjFact[1], shipR.Width, shipR.Height), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), SpriteEffects.None, 0);
-            sb.Draw(shipT[shipInd], new Vector2((int)((shipR.X - map.adjFact[0])*1.0f/Game1.viewingScale), (int)((shipR.Y - map.adjFact[1])*1.0f/Game1.viewingScale)), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), testing?Color.Red:Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), 1.0f/Game1.viewingScale*shipScale, SpriteEffects.None, 0);
-            int[] shipMapCent = centerOnMap();
-            // Matrix shipMat = Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) * Matrix.CreateScale(shipScale) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
-            Matrix shipMat = Matrix.CreateScale(shipScale) * Matrix.CreateTranslation(-shipT[shipInd].Width/2*shipScale, -shipT[shipInd].Height/2*shipScale, 0) *  Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
-            Rectangle toMod = CalculateBoundingRectangle(new Rectangle(0, 0, shipT[shipInd].Width, shipT[shipInd].Height), shipMat);
-            toMod.X -= map.adjFact[0];
-            toMod.Y -= map.adjFact[1];
-            //center on origin
-           // sb.Draw(tmT, toMod, Color.White);       //the testing gray bounding rect!!!
-            //Console.WriteLine(shipR.X + " " + shipR.Y + " for ship");
-            // Console.WriteLine()
-
-            /*
-            for (int i = 0; i < Map.islandsToDraw.Count; i++)
+            if (!charForm)
             {
-                int extension = 20;
-                Rectangle isloc = Map.islandsToDraw[i].isloc;
-                sb.Draw(tmT, new Rectangle(isloc.X - map.adjFact[0], isloc.Y - map.adjFact[1], isloc.Width, isloc.Height), Color.White);
+                //sb.Draw(shipT[shipInd],new Rectangle(shipR.X -map.adjFact[0], shipR.Y -map.adjFact[1], shipR.Width, shipR.Height), new Rectangle(0,0,shipT[shipInd].Width, shipT[shipInd].Height), Color.White, (float)(Math.PI*2 - shipHeadingRad), new Vector2(shipT[shipInd].Width/2, shipT[shipInd].Height/2), SpriteEffects.None, 0);
+                sb.Draw(shipT[shipInd], new Vector2((int)((shipR.X - map.adjFact[0]) * 1.0f / Game1.viewingScale), (int)((shipR.Y - map.adjFact[1]) * 1.0f / Game1.viewingScale)), new Rectangle(0, 0, shipT[shipInd].Width, shipT[shipInd].Height), testing ? Color.Red : Color.White, (float)(Math.PI * 2 - shipHeadingRad), new Vector2(shipT[shipInd].Width / 2, shipT[shipInd].Height / 2), 1.0f / Game1.viewingScale * shipScale, SpriteEffects.None, 0);
+                int[] shipMapCent = centerOnMap();
+                // Matrix shipMat = Matrix.CreateTranslation(-shipMapCent[0], -shipMapCent[1], 0) * Matrix.CreateScale(shipScale) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+                Matrix shipMat = Matrix.CreateScale(shipScale) * Matrix.CreateTranslation(-shipT[shipInd].Width / 2 * shipScale, -shipT[shipInd].Height / 2 * shipScale, 0) * Matrix.CreateRotationZ(shipHeadingRad) * Matrix.CreateTranslation(shipR.X, shipR.Y, 0);
+                Rectangle toMod = CalculateBoundingRectangle(new Rectangle(0, 0, shipT[shipInd].Width, shipT[shipInd].Height), shipMat);
+                toMod.X -= map.adjFact[0];
+                toMod.Y -= map.adjFact[1];
+                //center on origin
+                // sb.Draw(tmT, toMod, Color.White);       //the testing gray bounding rect!!!
+                //Console.WriteLine(shipR.X + " " + shipR.Y + " for ship");
+                // Console.WriteLine()
+
+                /*
+                for (int i = 0; i < Map.islandsToDraw.Count; i++)
+                {
+                    int extension = 20;
+                    Rectangle isloc = Map.islandsToDraw[i].isloc;
+                    sb.Draw(tmT, new Rectangle(isloc.X - map.adjFact[0], isloc.Y - map.adjFact[1], isloc.Width, isloc.Height), Color.White);
+                }
+                */
+            } else
+            {
+                //character form
+                sb.Draw(shipT[shipInd], new Vector2((int)((shipR.X - map.adjFact[0]) * 1.0f / Game1.viewingScale), (int)((shipR.Y - map.adjFact[1]) * 1.0f / Game1.viewingScale)), new Rectangle(0, 0, shipT[shipInd].Width, shipT[shipInd].Height), testing ? Color.Red : Color.White, (float)(Math.PI * 2 - shipHeadingRad), new Vector2(shipT[shipInd].Width / 2, shipT[shipInd].Height / 2), 1.0f / Game1.viewingScale * shipScale, SpriteEffects.None, 0);
             }
-            */
-                
+
+
         }
 
         /// <summary>
